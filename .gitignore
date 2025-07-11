@@ -57,3 +57,17 @@ public/pragmatic-*.js
 *-report.json
 *-results.json
 *-analysis-report.json
+
+# Cover image verification and API related files
+cover-image-verification.js
+improved-cover-verification.js
+cover-image-auto-fixer.js
+cover-image-ocr-validator.js
+actual-mismatch-detector.js
+quick-cover-check.js
+
+# API keys and sensitive data
+.env
+.env.*
+api-keys.js
+*-api-key.js

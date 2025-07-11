@@ -5,7 +5,7 @@ const { URLSearchParams } = require('url');
 // 複数の検索戦略を実装
 class GoogleBooksSearcher {
   constructor() {
-    this.apiKey = process.env.GOOGLE_BOOKS_API_KEY || 'AIzaSyDl9qkfFGN_wGzXBGtOYGqAzDgmfTgPjmo';
+    this.apiKey = process.env.GOOGLE_BOOKS_API_KEY || 'YOUR_API_KEY_HERE';
     this.baseUrl = 'https://www.googleapis.com/books/v1/volumes';
   }
 

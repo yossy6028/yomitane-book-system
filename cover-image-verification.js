@@ -10,7 +10,7 @@ function searchGoogleBooks(title, author) {
     const params = new URLSearchParams({
       q: query,
       maxResults: 10,
-      key: process.env.GOOGLE_BOOKS_API_KEY || 'AIzaSyDl9qkfFGN_wGzXBGtOYGqAzDgmfTgPjmo'
+      key: process.env.GOOGLE_BOOKS_API_KEY || 'YOUR_API_KEY_HERE'
     });
     
     const url = `https://www.googleapis.com/books/v1/volumes?${params}`;
