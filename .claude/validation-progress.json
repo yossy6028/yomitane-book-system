@@ -1,0 +1,9 @@
+{
+  "totalBooks": 272,
+  "processedBooks": 140,
+  "successfulBooks": 65,
+  "failedBooks": 75,
+  "currentBatch": 28,
+  "startTime": "2025-07-04T12:46:51.417Z",
+  "lastUpdated": "2025-07-04T12:48:52.545Z"
+}

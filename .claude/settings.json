@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "task-complete": "say タスクが完了しました"
+  }
+}

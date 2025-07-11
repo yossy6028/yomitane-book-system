@@ -1,0 +1,208 @@
+{
+  "timestamp": "2025-07-02T06:57:49.928Z",
+  "success_rate": 100,
+  "total_books": 8,
+  "successful_books": 8,
+  "detailed_results": [
+    {
+      "book": {
+        "title": "かいけつゾロリのドラゴンたいじ",
+        "author": "原ゆたか",
+        "isbn": "9784591053048"
+      },
+      "isbn_search": {
+        "success": false,
+        "title": "「死ぬ」ということ",
+        "authors": [
+          "サンダース,P.(ピート)"
+        ],
+        "imageLinks": null,
+        "reason": "no_image"
+      },
+      "title_search": {
+        "success": true,
+        "title": "かいけつゾロリのドラゴンたいじ2",
+        "authors": [
+          "原ゆたか",
+          "原京子"
+        ],
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=XFINugEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=XFINugEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "similarity": 85
+      },
+      "status": "success"
+    },
+    {
+      "book": {
+        "title": "おしりたんてい",
+        "author": "トロル",
+        "isbn": "9784591139011"
+      },
+      "isbn_search": {
+        "success": true,
+        "title": "検定クイズ100鉄道",
+        "authors": [
+          "検定クイズ研究会"
+        ],
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=1_F6oAEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=1_F6oAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "reason": "found"
+      },
+      "title_search": null,
+      "status": "success"
+    },
+    {
+      "book": {
+        "title": "ノンタンぶらんこのせて",
+        "author": "キヨノサチコ",
+        "isbn": "9784033170103"
+      },
+      "isbn_search": {
+        "success": false,
+        "reason": "not_found"
+      },
+      "title_search": {
+        "success": true,
+        "title": "ノンタンぶらんこのせて",
+        "authors": [
+          "キヨノサチコ"
+        ],
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=QX0FOwAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=QX0FOwAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "similarity": 100
+      },
+      "status": "success"
+    },
+    {
+      "book": {
+        "title": "ぐりとぐら",
+        "author": "中川李枝子",
+        "isbn": "9784834000829"
+      },
+      "isbn_search": {
+        "success": true,
+        "title": "ぐりとぐら",
+        "authors": [
+          "なかがわりえこ",
+          "中川李枝子"
+        ],
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=BjqVAQAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=BjqVAQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "reason": "found"
+      },
+      "title_search": null,
+      "status": "success"
+    },
+    {
+      "book": {
+        "title": "からすのパンやさん",
+        "author": "かこさとし",
+        "isbn": "9784032060300"
+      },
+      "isbn_search": {
+        "success": false,
+        "title": "わっしょいわっしょいぶんぶんぶん",
+        "authors": [
+          "加古里子"
+        ],
+        "imageLinks": null,
+        "reason": "no_image"
+      },
+      "title_search": {
+        "success": true,
+        "title": "からすのおかしやさん",
+        "authors": [
+          "かこさとし"
+        ],
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=pNKemwEACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=pNKemwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "similarity": 70
+      },
+      "status": "success"
+    },
+    {
+      "book": {
+        "title": "どうぞのいす",
+        "author": "香山美子・柿本幸造",
+        "isbn": "9784893255365"
+      },
+      "isbn_search": {
+        "success": true,
+        "title": "およぎたいゆきだるま",
+        "authors": [
+          "くぼりえ"
+        ],
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=1YBmQgAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=1YBmQgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "reason": "found"
+      },
+      "title_search": null,
+      "status": "success"
+    },
+    {
+      "book": {
+        "title": "きょうはなんのひ？",
+        "author": "瀬田貞二・林明子",
+        "isbn": "9784834007916"
+      },
+      "isbn_search": {
+        "success": false,
+        "reason": "not_found"
+      },
+      "title_search": {
+        "success": true,
+        "title": "大好きな本と出合う！ 小学生のための読書案内世界が広がる&ココロが豊かになる250冊",
+        "authors": [
+          "山本省三"
+        ],
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=MwUXEQAAQBAJ&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=MwUXEQAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+        },
+        "similarity": 8
+      },
+      "status": "success"
+    },
+    {
+      "book": {
+        "title": "ふしぎなかぎばあさん",
+        "author": "手島悠介",
+        "isbn": "9784265916108"
+      },
+      "isbn_search": {
+        "success": false,
+        "title": "二ちょうめのおばけやしき",
+        "authors": [
+          "木暮正夫"
+        ],
+        "imageLinks": null,
+        "reason": "no_image"
+      },
+      "title_search": {
+        "success": true,
+        "title": "かぎばあさんのファミリーレストラン",
+        "authors": [
+          "手島悠介"
+        ],
+        "imageLinks": {
+          "smallThumbnail": "http://books.google.com/books/content?id=txuYQgAACAAJ&printsec=frontcover&img=1&zoom=5&source=gbs_api",
+          "thumbnail": "http://books.google.com/books/content?id=txuYQgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+        },
+        "similarity": 12
+      },
+      "status": "success"
+    }
+  ]
+}

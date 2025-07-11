@@ -1,0 +1,461 @@
+[
+  {
+    "title": "モモ",
+    "author": "ミヒャエル・エンデ",
+    "description": "時間泥棒と少女モモの不思議な冒険。時間の大切さを教えてくれる名作ファンタジー。",
+    "genre": "ファンタジー",
+    "targetAge": "8-12歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["時間", "友情", "想像力"]
+  },
+  {
+    "title": "窓ぎわのトットちゃん",
+    "author": "黒柳徹子",
+    "description": "ユニークな小学校での心温まるエピソード。個性を大切にすることの素晴らしさを描く。",
+    "genre": "実話・回想録",
+    "targetAge": "7-11歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["学校生活", "個性", "成長"]
+  },
+  {
+    "title": "エルマーのぼうけん",
+    "author": "ルース・スタイルス・ガネット",
+    "description": "男の子エルマーが竜の子を助ける冒険物語。想像力あふれる名作。",
+    "genre": "冒険",
+    "targetAge": "6-10歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["冒険", "友情", "勇気"]
+  },
+  {
+    "title": "チョコレート工場の秘密",
+    "author": "ロアルド・ダール",
+    "description": "不思議なチョコレート工場での奇想天外な冒険。子どもの夢が詰まった物語。",
+    "genre": "ファンタジー",
+    "targetAge": "7-11歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["想像力", "夢", "家族"]
+  },
+  {
+    "title": "かいけつゾロリの大冒険",
+    "author": "原ゆたか",
+    "description": "いたずら好きなキツネのゾロリが繰り広げる楽しい冒険シリーズ。",
+    "genre": "冒険",
+    "targetAge": "6-10歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["冒険", "ユーモア", "友情"]
+  },
+  {
+    "title": "きつねのルナール",
+    "author": "オトフリート・プロイスラー",
+    "description": "賢いきつねルナールのユーモラスな冒険。ドイツの古典民話。",
+    "genre": "民話",
+    "targetAge": "7-11歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["知恵", "ユーモア", "動物"]
+  },
+  {
+    "title": "ふしぎの国のアリス",
+    "author": "ルイス・キャロル",
+    "description": "うさぎの穴に落ちたアリスの不思議な世界での冒険。想像力の名作。",
+    "genre": "ファンタジー",
+    "targetAge": "7-11歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["想像力", "冒険", "不思議"]
+  },
+  {
+    "title": "いやいやえん",
+    "author": "中川李枝子",
+    "description": "保育園での子どもたちの楽しい日常を描いた心温まる物語。",
+    "genre": "学校・友情",
+    "targetAge": "6-9歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["友情", "成長", "日常"]
+  },
+  {
+    "title": "魔女の宅急便",
+    "author": "角野栄子",
+    "description": "13歳の魔女キキが新しい町で始める宅急便屋さんの物語。",
+    "genre": "ファンタジー",
+    "targetAge": "8-12歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["成長", "独立", "魔法"]
+  },
+  {
+    "title": "くまの子ウーフ",
+    "author": "神沢利子",
+    "description": "好奇心いっぱいの子ぐまウーフの日常を描いた温かい物語。",
+    "genre": "動物",
+    "targetAge": "6-9歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["好奇心", "友情", "成長"]
+  },
+  {
+    "title": "おしいれのぼうけん",
+    "author": "ふるたたるひ・たばたせいいち",
+    "description": "押し入れの中で繰り広げられる想像力あふれる冒険物語。",
+    "genre": "冒険",
+    "targetAge": "6-9歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["想像力", "友情", "冒険"]
+  },
+  {
+    "title": "やまんばのにしき",
+    "author": "松谷みよ子",
+    "description": "日本の民話を美しく再話した心に響く物語集。",
+    "genre": "民話",
+    "targetAge": "7-10歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["伝統", "心の美しさ", "日本文化"]
+  },
+  {
+    "title": "星の王子さま",
+    "author": "サン=テグジュペリ",
+    "description": "小さな王子さまの宇宙旅行を通して描かれる人生の真理。",
+    "genre": "ファンタジー",
+    "targetAge": "8-12歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["友情", "愛", "人生"]
+  },
+  {
+    "title": "大きなかぶ",
+    "author": "Ａ・トルストイ再話",
+    "description": "みんなで力を合わせて大きなかぶを抜く、協力の大切さを教える物語。",
+    "genre": "民話",
+    "targetAge": "6-8歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["協力", "助け合い", "努力"]
+  },
+  {
+    "title": "科学のふしぎ大図鑑",
+    "author": "監修：科学技術館",
+    "description": "身近な科学の不思議を写真とイラストで分かりやすく解説。",
+    "genre": "科学",
+    "targetAge": "7-11歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["科学", "知識", "探究心"]
+  },
+  {
+    "title": "ドリトル先生航海記",
+    "author": "ヒュー・ロフティング",
+    "description": "動物と話せるお医者さんの海の冒険。想像力豊かな名作。",
+    "genre": "冒険",
+    "targetAge": "8-12歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["動物", "冒険", "優しさ"]
+  },
+  {
+    "title": "かこさとしの科学絵本シリーズ",
+    "author": "加古里子",
+    "description": "身近な科学を楽しく学べる絵本シリーズ。好奇心を育てる。",
+    "genre": "科学",
+    "targetAge": "6-10歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["科学", "学習", "探究心"]
+  },
+  {
+    "title": "おばけのバーバパパ",
+    "author": "アネット・チゾン",
+    "description": "形を自由に変えられるおばけの家族の楽しい日常。",
+    "genre": "ファンタジー",
+    "targetAge": "6-9歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["家族", "やさしさ", "ユーモア"]
+  },
+  {
+    "title": "はれときどきぶた",
+    "author": "矢玉四郎",
+    "description": "日記に書いたことが現実になってしまう不思議で楽しい物語。",
+    "genre": "ユーモア",
+    "targetAge": "7-10歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["ユーモア", "想像力", "日常"]
+  },
+  {
+    "title": "シートン動物記",
+    "author": "アーネスト・T・シートン",
+    "description": "野生動物たちの生き生きとした生活を描いた名作動物文学。",
+    "genre": "動物",
+    "targetAge": "8-12歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["動物", "自然", "生命"]
+  },
+  {
+    "title": "ハリー・ポッターと賢者の石",
+    "author": "J.K.ローリング",
+    "description": "魔法学校での少年ハリーの成長と冒険を描いた世界的名作。",
+    "genre": "ファンタジー",
+    "targetAge": "9-12歳",
+    "readingLevel": "小学校高学年",
+    "themes": ["魔法", "友情", "成長"]
+  },
+  {
+    "title": "ナルニア国ものがたり",
+    "author": "C.S.ルイス",
+    "description": "魔法の国ナルニアでの子どもたちの壮大な冒険。",
+    "genre": "ファンタジー",
+    "targetAge": "8-12歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["冒険", "魔法", "勇気"]
+  },
+  {
+    "title": "若草物語",
+    "author": "ルイザ・メイ・オルコット",
+    "description": "四姉妹の成長を描いた心温まる家族の物語。",
+    "genre": "家族",
+    "targetAge": "8-12歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["家族", "成長", "愛情"]
+  },
+  {
+    "title": "小公女",
+    "author": "フランシス・バーネット",
+    "description": "困難に立ち向かう少女セーラの勇気と優しさの物語。",
+    "genre": "名作",
+    "targetAge": "8-12歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["勇気", "優しさ", "成長"]
+  },
+  {
+    "title": "宮沢賢治童話集",
+    "author": "宮沢賢治",
+    "description": "「注文の多い料理店」「セロ弾きのゴーシュ」など心に残る名作集。",
+    "genre": "名作",
+    "targetAge": "7-11歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["自然", "音楽", "心の美しさ"]
+  },
+  {
+    "title": "アンデルセン童話集",
+    "author": "ハンス・クリスチャン・アンデルセン",
+    "description": "「人魚姫」「親指姫」など世界中で愛される童話集。",
+    "genre": "童話",
+    "targetAge": "6-10歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["愛", "犠牲", "美しさ"]
+  },
+  {
+    "title": "ねずみくんのチョッキ",
+    "author": "なかえよしを",
+    "description": "ねずみくんシリーズの楽しい絵本。思いやりの心を育む。",
+    "genre": "絵本",
+    "targetAge": "6-8歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["思いやり", "友情", "ユーモア"]
+  },
+  {
+    "title": "野口英世物語",
+    "author": "監修：野口英世記念館",
+    "description": "世界的な医学者野口英世の努力と情熱に満ちた生涯。",
+    "genre": "伝記",
+    "targetAge": "8-12歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["努力", "夢", "医学"]
+  },
+  {
+    "title": "織田信長",
+    "author": "監修：歴史学習研究会",
+    "description": "戦国時代の英雄織田信長の生涯を子ども向けに分かりやすく。",
+    "genre": "歴史・伝記",
+    "targetAge": "8-12歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["歴史", "リーダーシップ", "革新"]
+  },
+  {
+    "title": "恐竜大図鑑",
+    "author": "監修：恐竜博物館",
+    "description": "迫力ある恐竜の世界を美しいイラストと写真で紹介。",
+    "genre": "科学",
+    "targetAge": "6-10歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["恐竜", "古生物", "科学"]
+  },
+  {
+    "title": "名探偵コナン推理ファイル",
+    "author": "青山剛昌",
+    "description": "コナンと一緒に謎解きを楽しみながら科学知識も学べる。",
+    "genre": "推理",
+    "targetAge": "7-11歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["推理", "科学", "論理思考"]
+  },
+  {
+    "title": "怪盗ルパンシリーズ",
+    "author": "モーリス・ルブラン",
+    "description": "紳士怪盗ルパンの華麗な活躍を描いた冒険推理小説。",
+    "genre": "推理・冒険",
+    "targetAge": "9-12歳",
+    "readingLevel": "小学校高学年",
+    "themes": ["推理", "冒険", "知恵"]
+  },
+  {
+    "title": "シャーロック・ホームズの冒険",
+    "author": "アーサー・コナン・ドイル",
+    "description": "名探偵ホームズの推理を楽しめる子ども向け版。",
+    "genre": "推理",
+    "targetAge": "9-12歳",
+    "readingLevel": "小学校高学年",
+    "themes": ["推理", "論理思考", "観察力"]
+  },
+  {
+    "title": "まんが日本昔ばなし",
+    "author": "川内彩友美",
+    "description": "桃太郎、浦島太郎など日本の昔話を楽しく読める。",
+    "genre": "昔話",
+    "targetAge": "6-9歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["伝統", "教訓", "日本文化"]
+  },
+  {
+    "title": "からすのパンやさん",
+    "author": "かこさとし",
+    "description": "からすの家族が営むパン屋さんの心温まる物語。",
+    "genre": "絵本",
+    "targetAge": "6-8歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["家族", "努力", "協力"]
+  },
+  {
+    "title": "はじめてのおつかい",
+    "author": "筒井頼子",
+    "description": "小さな女の子の初めてのおつかいを描いた成長の物語。",
+    "genre": "絵本",
+    "targetAge": "6-8歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["成長", "勇気", "自立"]
+  },
+  {
+    "title": "昆虫の世界",
+    "author": "監修：昆虫研究所",
+    "description": "身近な昆虫から珍しい昆虫まで、写真で学ぶ昆虫図鑑。",
+    "genre": "科学",
+    "targetAge": "6-10歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["昆虫", "自然", "観察"]
+  },
+  {
+    "title": "植物のふしぎ",
+    "author": "監修：植物園",
+    "description": "植物の成長や仕組みを美しい写真とともに解説。",
+    "genre": "科学",
+    "targetAge": "7-11歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["植物", "自然", "生命"]
+  },
+  {
+    "title": "がまくんとかえるくん",
+    "author": "アーノルド・ローベル",
+    "description": "がまくんとかえるくんの心温まる友情物語。",
+    "genre": "友情",
+    "targetAge": "6-9歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["友情", "思いやり", "日常"]
+  },
+  {
+    "title": "フレデリック",
+    "author": "レオ・レオニ",
+    "description": "働かないねずみフレデリックの真の価値を描いた名作絵本。",
+    "genre": "絵本",
+    "targetAge": "6-9歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["個性", "芸術", "価値観"]
+  },
+  {
+    "title": "スイミー",
+    "author": "レオ・レオニ",
+    "description": "小さな魚スイミーの勇気と知恵を描いた美しい絵本。",
+    "genre": "絵本",
+    "targetAge": "6-8歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["勇気", "協力", "知恵"]
+  },
+  {
+    "title": "まど・みちおの詩集",
+    "author": "まど・みちお",
+    "description": "「ぞうさん」「やぎさんゆうびん」など心に響く詩集。",
+    "genre": "詩",
+    "targetAge": "6-10歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["言葉", "リズム", "自然"]
+  },
+  {
+    "title": "谷川俊太郎詩集",
+    "author": "谷川俊太郎",
+    "description": "「朝のリレー」など子どもの心に響く現代詩集。",
+    "genre": "詩",
+    "targetAge": "7-11歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["言葉", "感性", "表現"]
+  },
+  {
+    "title": "ことばあそびうた",
+    "author": "谷川俊太郎",
+    "description": "言葉の音やリズムを楽しむユニークな詩集。",
+    "genre": "詩・言葉遊び",
+    "targetAge": "6-9歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["言葉遊び", "リズム", "創造性"]
+  },
+  {
+    "title": "ももたろう",
+    "author": "松居直",
+    "description": "日本の代表的昔話を美しい絵とともに再話。",
+    "genre": "昔話",
+    "targetAge": "6-8歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["勇気", "正義", "仲間"]
+  },
+  {
+    "title": "世界の国旗図鑑",
+    "author": "監修：地理学会",
+    "description": "世界各国の国旗とその国の文化を楽しく学べる。",
+    "genre": "社会",
+    "targetAge": "7-11歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["世界", "文化", "地理"]
+  },
+  {
+    "title": "坂本龍馬",
+    "author": "監修：歴史研究会",
+    "description": "幕末の英雄坂本龍馬の夢と行動力を描いた伝記。",
+    "genre": "歴史・伝記",
+    "targetAge": "8-12歳",
+    "readingLevel": "小学校中学年",
+    "themes": ["歴史", "夢", "行動力"]
+  },
+  {
+    "title": "レインボーマジック",
+    "author": "デイジー・メドウズ",
+    "description": "妖精たちと人間の女の子の魔法いっぱいの冒険。",
+    "genre": "ファンタジー",
+    "targetAge": "7-10歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["魔法", "友情", "冒険"]
+  },
+  {
+    "title": "こまったさんシリーズ",
+    "author": "寺村輝夫",
+    "description": "お料理上手なこまったさんが繰り広げる楽しい物語。",
+    "genre": "日常・ユーモア",
+    "targetAge": "6-9歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["料理", "生活", "創意工夫"]
+  },
+  {
+    "title": "わかったさんシリーズ",
+    "author": "寺村輝夫",
+    "description": "お菓子作りが得意なわかったさんの心温まる物語。",
+    "genre": "日常・ユーモア",
+    "targetAge": "6-9歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["お菓子", "優しさ", "創造"]
+  },
+  {
+    "title": "ミッケ！",
+    "author": "ウォルター・ウィック",
+    "description": "隠れているものを探す楽しい写真絵本シリーズ。",
+    "genre": "パズル・ゲーム",
+    "targetAge": "6-10歳",
+    "readingLevel": "小学校低学年",
+    "themes": ["観察力", "集中力", "発見"]
+  }
+]

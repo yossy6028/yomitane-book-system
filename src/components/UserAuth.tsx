@@ -85,9 +85,10 @@ const UserAuth: React.FC<UserAuthProps> = ({ onUserLogin, onClose }) => {
         throw new Error('読書レベルを選択してください');
       }
 
-      if (formData.interests.length === 0) {
-        throw new Error('興味のある分野を少なくとも1つ選択してください');
-      }
+      // 興味分野の選択は推薦時に行うため、初期登録時は不要
+      // if (formData.interests.length === 0) {
+      //   throw new Error('興味のある分野を少なくとも1つ選択してください');
+      // }
 
       const newUser = userService.createUser({
         username: formData.username,
@@ -95,7 +96,7 @@ const UserAuth: React.FC<UserAuthProps> = ({ onUserLogin, onClose }) => {
         email: formData.email,
         age: formData.age,
         readingLevel: formData.readingLevel as User['readingLevel'],
-        interests: formData.interests,
+        interests: [], // 初期登録時は空配列、推薦時に選択
         vocabularyScore: 5, // 初期値
         personalityTraits: [],
         parentEmail: formData.parentEmail,
@@ -250,6 +251,7 @@ const UserAuth: React.FC<UserAuthProps> = ({ onUserLogin, onClose }) => {
         </select>
       </div>
 
+      {/* 興味分野の選択は推薦時に行うため、初期登録時は削除
       <div className="form-group">
         <label>興味のある分野 * (複数選択可):</label>
         <div className="interests-grid">
@@ -265,6 +267,7 @@ const UserAuth: React.FC<UserAuthProps> = ({ onUserLogin, onClose }) => {
           ))}
         </div>
       </div>
+      */}
 
       <div className="form-group">
         <label htmlFor="parentEmail">保護者のメールアドレス:</label>

@@ -1,0 +1,262 @@
+[
+  {
+    "timestamp": "2025-07-04T12:48:51.076Z",
+    "level": "WARN",
+    "message": "Google Books API レスポンスエラー",
+    "data": {
+      "status": 429,
+      "query": "intitle:\"メイおばちゃんの庭\" inauthor:\"シンシア ライラント\""
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:51.077Z",
+    "level": "WARN",
+    "message": "Google Books API レスポンスエラー",
+    "data": {
+      "status": 429,
+      "query": "intitle:\"キャプテンマークと銭湯と\" inauthor:\"佐藤いつ子\""
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:51.079Z",
+    "level": "WARN",
+    "message": "Google Books API レスポンスエラー",
+    "data": {
+      "status": 429,
+      "query": "intitle:\"100年の木の下で\" inauthor:\"杉本りえ\""
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:51.080Z",
+    "level": "WARN",
+    "message": "Google Books API レスポンスエラー",
+    "data": {
+      "status": 429,
+      "query": "intitle:\"大人になるっておもしろい？\" inauthor:\"清水眞砂子\""
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:51.085Z",
+    "level": "WARN",
+    "message": "Google Books API レスポンスエラー",
+    "data": {
+      "status": 429,
+      "query": "intitle:\"あえて、つながらない生きかた\" inauthor:\"高野登\""
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:51.240Z",
+    "level": "WARN",
+    "message": "Google Books API レスポンスエラー",
+    "data": {
+      "status": 429,
+      "query": "\"メイおばちゃんの庭\" \"シンシア ライラント\""
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:51.242Z",
+    "level": "WARN",
+    "message": "Google Books API レスポンスエラー",
+    "data": {
+      "status": 429,
+      "query": "\"キャプテンマークと銭湯と\" \"佐藤いつ子\""
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:51.243Z",
+    "level": "WARN",
+    "message": "Google Books API レスポンスエラー",
+    "data": {
+      "status": 429,
+      "query": "\"100年の木の下で\" \"杉本りえ\""
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:51.303Z",
+    "level": "WARN",
+    "message": "Google Books API レスポンスエラー",
+    "data": {
+      "status": 429,
+      "query": "\"あえて、つながらない生きかた\" \"高野登\""
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:51.405Z",
+    "level": "WARN",
+    "message": "Google Books API レスポンスエラー",
+    "data": {
+      "status": 429,
+      "query": "メイおばちゃんの庭 シンシア ライラント"
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:51.405Z",
+    "level": "DEBUG",
+    "message": "書籍検証完了",
+    "data": {
+      "book": {
+        "id": "143",
+        "title": "メイおばちゃんの庭"
+      },
+      "found": false,
+      "exactMatches": 0
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:51.893Z",
+    "level": "WARN",
+    "message": "Google Books API レスポンスエラー",
+    "data": {
+      "status": 429,
+      "query": "大人になるっておもしろい？ 清水眞砂子"
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:51.893Z",
+    "level": "DEBUG",
+    "message": "書籍検証完了",
+    "data": {
+      "book": {
+        "id": "142",
+        "title": "大人になるっておもしろい？"
+      },
+      "found": false,
+      "exactMatches": 0
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:52.080Z",
+    "level": "DEBUG",
+    "message": "書籍検証完了",
+    "data": {
+      "book": {
+        "id": "141",
+        "title": "キャプテンマークと銭湯と"
+      },
+      "found": false,
+      "exactMatches": 0
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:52.095Z",
+    "level": "DEBUG",
+    "message": "書籍検証完了",
+    "data": {
+      "book": {
+        "id": "145",
+        "title": "あえて、つながらない生きかた"
+      },
+      "found": true,
+      "exactMatches": 1
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:52.544Z",
+    "level": "DEBUG",
+    "message": "書籍検証完了",
+    "data": {
+      "book": {
+        "id": "144",
+        "title": "100年の木の下で"
+      },
+      "found": true,
+      "exactMatches": 2
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:52.544Z",
+    "level": "FAILURE",
+    "message": "表紙発見失敗",
+    "data": {
+      "book": {
+        "id": "141",
+        "title": "キャプテンマークと銭湯と",
+        "author": "佐藤いつ子"
+      },
+      "issues": [],
+      "recommendation": "fix_metadata",
+      "bestCandidate": {
+        "title": "キャプテンマークと銭湯と",
+        "authors": [
+          "佐藤　いつ子"
+        ],
+        "publisher": "KADOKAWA",
+        "publishedDate": "2019-03-14",
+        "thumbnail": "http://books.google.com/books/content?id=FuiLDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        "previewLink": "http://books.google.co.jp/books?id=FuiLDwAAQBAJ&printsec=frontcover&dq=%E3%82%AD%E3%83%A3%E3%83%97%E3%83%86%E3%83%B3%E3%83%9E%E3%83%BC%E3%82%AF%E3%81%A8%E9%8A%AD%E6%B9%AF%E3%81%A8+%E4%BD%90%E8%97%A4%E3%81%84%E3%81%A4%E5%AD%90&hl=&cd=1&source=gbs_api",
+        "titleSimilarity": 1,
+        "authorSimilarity": 0.8333333333333334
+      }
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:52.545Z",
+    "level": "FAILURE",
+    "message": "表紙発見失敗",
+    "data": {
+      "book": {
+        "id": "142",
+        "title": "大人になるっておもしろい？",
+        "author": "清水眞砂子"
+      },
+      "issues": [],
+      "recommendation": "keep",
+      "bestCandidate": {
+        "title": "大人になるっておもしろい?",
+        "authors": [
+          "清水真砂子"
+        ],
+        "publisher": "",
+        "publishedDate": "2015-04",
+        "thumbnail": "http://books.google.com/books/content?id=48yPrgEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "previewLink": "http://books.google.co.jp/books?id=48yPrgEACAAJ&dq=%22%E5%A4%A7%E4%BA%BA%E3%81%AB%E3%81%AA%E3%82%8B%E3%81%A3%E3%81%A6%E3%81%8A%E3%82%82%E3%81%97%E3%82%8D%E3%81%84%EF%BC%9F%22+%22%E6%B8%85%E6%B0%B4%E7%9C%9E%E7%A0%82%E5%AD%90%22&hl=&cd=1&source=gbs_api",
+        "titleSimilarity": 0.9230769230769231,
+        "authorSimilarity": 0.8
+      }
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:52.545Z",
+    "level": "FAILURE",
+    "message": "表紙発見失敗",
+    "data": {
+      "book": {
+        "id": "143",
+        "title": "メイおばちゃんの庭",
+        "author": "シンシア ライラント"
+      },
+      "issues": [
+        "検索結果0件"
+      ],
+      "recommendation": "remove"
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:52.545Z",
+    "level": "SUCCESS",
+    "message": "表紙発見成功",
+    "data": {
+      "book": {
+        "id": "144",
+        "title": "100年の木の下で",
+        "author": "杉本りえ"
+      },
+      "exactMatches": 2,
+      "thumbnail": "http://books.google.com/books/content?id=jRIwEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    }
+  },
+  {
+    "timestamp": "2025-07-04T12:48:52.545Z",
+    "level": "SUCCESS",
+    "message": "表紙発見成功",
+    "data": {
+      "book": {
+        "id": "145",
+        "title": "あえて、つながらない生きかた",
+        "author": "高野登"
+      },
+      "exactMatches": 1,
+      "thumbnail": "http://books.google.com/books/content?id=FVr2oQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api"
+    }
+  }
+]

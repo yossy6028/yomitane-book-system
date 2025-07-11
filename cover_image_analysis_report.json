@@ -1,0 +1,644 @@
+{
+  "timestamp": "2025-07-02T06:28:28.190Z",
+  "success_rate": 85,
+  "total_books": 20,
+  "successful_books": 17,
+  "isbn_success": 8,
+  "title_success": 9,
+  "detailed_results": [
+    {
+      "book": {
+        "title": "かいけつゾロリのドラゴンたいじ",
+        "author": "原ゆたか",
+        "isbn": "9784591053048"
+      },
+      "isbn_search": {
+        "success": false,
+        "title": "「死ぬ」ということ",
+        "authors": [
+          "サンダース,P.(ピート)"
+        ],
+        "reason": "no_image"
+      },
+      "title_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=XFINugEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "かいけつゾロリのドラゴンたいじ2",
+        "authors": [
+          "原ゆたか",
+          "原京子"
+        ],
+        "match_type": "minor_variation",
+        "similarity": 95,
+        "query_used": "かいけつゾロリのドラゴンたいじ 原ゆたか"
+      },
+      "best_match": {
+        "source": "title",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=XFINugEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "かいけつゾロリのドラゴンたいじ2",
+        "authors": [
+          "原ゆたか",
+          "原京子"
+        ],
+        "match_type": "minor_variation",
+        "similarity": 95,
+        "query_used": "かいけつゾロリのドラゴンたいじ 原ゆたか"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "おしりたんてい",
+        "author": "トロル",
+        "isbn": ""
+      },
+      "isbn_search": null,
+      "title_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=AxKkvwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "おしりたんてい",
+        "authors": [
+          "トロル"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "おしりたんてい トロル"
+      },
+      "best_match": {
+        "source": "title",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=AxKkvwEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "おしりたんてい",
+        "authors": [
+          "トロル"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "おしりたんてい トロル"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "ノンタンぶらんこのせて",
+        "author": "キヨノサチコ",
+        "isbn": "9784033170103"
+      },
+      "isbn_search": {
+        "success": false,
+        "reason": "not_found"
+      },
+      "title_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=QX0FOwAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "ノンタンぶらんこのせて",
+        "authors": [
+          "キヨノサチコ"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "ノンタンぶらんこのせて キヨノサチコ"
+      },
+      "best_match": {
+        "source": "title",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=QX0FOwAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "ノンタンぶらんこのせて",
+        "authors": [
+          "キヨノサチコ"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "ノンタンぶらんこのせて キヨノサチコ"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "ぐりとぐら",
+        "author": "中川李枝子",
+        "isbn": "9784834000829"
+      },
+      "isbn_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=BjqVAQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "ぐりとぐら",
+        "authors": [
+          "なかがわりえこ",
+          "中川李枝子"
+        ],
+        "reason": "found"
+      },
+      "title_search": null,
+      "best_match": {
+        "source": "isbn",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=BjqVAQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "ぐりとぐら",
+        "authors": [
+          "なかがわりえこ",
+          "中川李枝子"
+        ],
+        "reason": "found"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "はらぺこあおむし",
+        "author": "Eric Carle",
+        "isbn": "9784033280103"
+      },
+      "isbn_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=BhXmAQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "はらぺこあおむし",
+        "authors": [
+          "Eric Carle"
+        ],
+        "reason": "found"
+      },
+      "title_search": null,
+      "best_match": {
+        "source": "isbn",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=BhXmAQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "はらぺこあおむし",
+        "authors": [
+          "Eric Carle"
+        ],
+        "reason": "found"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "からすのパンやさん",
+        "author": "かこさとし",
+        "isbn": "9784032060300"
+      },
+      "isbn_search": {
+        "success": false,
+        "title": "わっしょいわっしょいぶんぶんぶん",
+        "authors": [
+          "加古里子"
+        ],
+        "reason": "no_image"
+      },
+      "title_search": {
+        "success": false,
+        "reason": "no_matches",
+        "best_match": {
+          "title": "からすのおかしやさん",
+          "authors": [
+            "かこさとし"
+          ],
+          "similarity": 70,
+          "has_image": true
+        }
+      },
+      "best_match": null,
+      "recommendations": [
+        "著者名の表記を確認（姓名順、中点の有無）"
+      ]
+    },
+    {
+      "book": {
+        "title": "どうぞのいす",
+        "author": "香山美子・柿本幸造",
+        "isbn": "9784893255365"
+      },
+      "isbn_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=1YBmQgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "およぎたいゆきだるま",
+        "authors": [
+          "くぼりえ"
+        ],
+        "reason": "found"
+      },
+      "title_search": null,
+      "best_match": {
+        "source": "isbn",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=1YBmQgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "およぎたいゆきだるま",
+        "authors": [
+          "くぼりえ"
+        ],
+        "reason": "found"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "スイミー",
+        "author": "レオ・レオニ",
+        "isbn": ""
+      },
+      "isbn_search": null,
+      "title_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=oBhiAAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "スイミー",
+        "authors": [
+          "レオ・レオニ"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "intitle:\"スイミー\" inauthor:\"レオ・レオニ\""
+      },
+      "best_match": {
+        "source": "title",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=oBhiAAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "スイミー",
+        "authors": [
+          "レオ・レオニ"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "intitle:\"スイミー\" inauthor:\"レオ・レオニ\""
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "100万回生きたねこ",
+        "author": "佐野洋子",
+        "isbn": "9784061272743"
+      },
+      "isbn_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=Yb_hQgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "100万回生きたねこ",
+        "authors": [
+          "佐野洋子"
+        ],
+        "reason": "found"
+      },
+      "title_search": null,
+      "best_match": {
+        "source": "isbn",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=Yb_hQgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "100万回生きたねこ",
+        "authors": [
+          "佐野洋子"
+        ],
+        "reason": "found"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "きょうはなんのひ？",
+        "author": "瀬田貞二・林明子",
+        "isbn": "9784834007916"
+      },
+      "isbn_search": {
+        "success": false,
+        "reason": "not_found"
+      },
+      "title_search": {
+        "success": false,
+        "reason": "no_matches",
+        "best_match": {
+          "title": "校内放送でも���あがろう！　めざせ！ 学校なぞなぞクイズ王 きょうはなんの日？クイズ",
+          "authors": [
+            "ワン・ステップ"
+          ],
+          "similarity": 21,
+          "has_image": true
+        }
+      },
+      "best_match": null,
+      "recommendations": [
+        "タイトルの表記を確認（カタカナ・ひらがな・漢字の違い）",
+        "著者名の表記を確認（姓名順、中点の有無）"
+      ]
+    },
+    {
+      "book": {
+        "title": "はれときどきぶた",
+        "author": "矢玉四郎",
+        "isbn": "9784265916030"
+      },
+      "isbn_search": {
+        "success": false,
+        "reason": "not_found"
+      },
+      "title_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=SbFqPQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "はれときどきぶた",
+        "authors": [
+          "矢玉四郎"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "intitle:\"はれときどきぶた\" inauthor:\"矢玉四郎\""
+      },
+      "best_match": {
+        "source": "title",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=SbFqPQAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "はれときどきぶた",
+        "authors": [
+          "矢玉四郎"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "intitle:\"はれときどきぶた\" inauthor:\"矢玉四郎\""
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "ふしぎなかぎばあさん",
+        "author": "手島悠介",
+        "isbn": "9784265916108"
+      },
+      "isbn_search": {
+        "success": false,
+        "title": "二ちょうめのおばけやしき",
+        "authors": [
+          "木暮正夫"
+        ],
+        "reason": "no_image"
+      },
+      "title_search": {
+        "success": false,
+        "reason": "no_matches",
+        "best_match": {
+          "title": "かぎばあさんのミステリー館",
+          "authors": [
+            "手島悠介"
+          ],
+          "similarity": 15,
+          "has_image": true
+        }
+      },
+      "best_match": null,
+      "recommendations": [
+        "タイトルの表記を確認（カタカナ・ひらがな・漢字の違い）",
+        "著者名の表記を確認（姓名順、中点の有無）"
+      ]
+    },
+    {
+      "book": {
+        "title": "チョコレート工場の秘密",
+        "author": "ロアルド・ダール",
+        "isbn": "9784566013872"
+      },
+      "isbn_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=k1axoQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "妖精パックにご用心",
+        "authors": [
+          "タビサブラック"
+        ],
+        "reason": "found"
+      },
+      "title_search": null,
+      "best_match": {
+        "source": "isbn",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=k1axoQEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "妖精パックにご用心",
+        "authors": [
+          "タビサブラック"
+        ],
+        "reason": "found"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "エルマーのぼうけん",
+        "author": "ルース・スタイルス・ガネット",
+        "isbn": "9784834000139"
+      },
+      "isbn_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=F8YoPAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "エルマーのぼうけん",
+        "authors": [
+          "Ruth Stiles Gannett",
+          "ルース・スタイルス・ガネット"
+        ],
+        "reason": "found"
+      },
+      "title_search": null,
+      "best_match": {
+        "source": "isbn",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=F8YoPAAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "エルマーのぼうけん",
+        "authors": [
+          "Ruth Stiles Gannett",
+          "ルース・スタイルス・ガネット"
+        ],
+        "reason": "found"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "ルドルフとイッパイアッテナ",
+        "author": "斉藤洋",
+        "isbn": "9784061287075"
+      },
+      "isbn_search": {
+        "success": false,
+        "reason": "not_found"
+      },
+      "title_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=dPCSDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        "title": "ルドルフとイッパイアッテナ",
+        "authors": [
+          "斉藤洋",
+          "杉浦範茂"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "ルドルフとイッパイアッテナ 斉藤洋"
+      },
+      "best_match": {
+        "source": "title",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=dPCSDwAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        "title": "ルドルフとイッパイアッテナ",
+        "authors": [
+          "斉藤洋",
+          "杉浦範茂"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "ルドルフとイッパイアッテナ 斉藤洋"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "魔女の宅急便",
+        "author": "角野栄子",
+        "isbn": "9784834008647"
+      },
+      "isbn_search": {
+        "success": false,
+        "title": "ほね",
+        "authors": [
+          "堀内誠一"
+        ],
+        "reason": "no_image"
+      },
+      "title_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=QIBynAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "魔女の宅急便",
+        "authors": [
+          "角野栄子"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "intitle:\"魔女の宅急便\" inauthor:\"角野栄子\""
+      },
+      "best_match": {
+        "source": "title",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=QIBynAEACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "魔女の宅急便",
+        "authors": [
+          "角野栄子"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "intitle:\"魔女の宅急便\" inauthor:\"角野栄子\""
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "ハリー・ポッターと賢者の石",
+        "author": "J.K.ローリング",
+        "isbn": "9784915512377"
+      },
+      "isbn_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=jfApAQAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "ハリー・ポッターと賢者の石",
+        "authors": [
+          "J.K.ローリング"
+        ],
+        "reason": "found"
+      },
+      "title_search": null,
+      "best_match": {
+        "source": "isbn",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=jfApAQAAMAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "ハリー・ポッターと賢者の石",
+        "authors": [
+          "J.K.ローリング"
+        ],
+        "reason": "found"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "星の王子さま",
+        "author": "サン・テグジュペリ",
+        "isbn": "9784001140019"
+      },
+      "isbn_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=A5o6PgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "星の王子さま",
+        "authors": [
+          "サン=テグジュペリ,A. de"
+        ],
+        "reason": "found"
+      },
+      "title_search": null,
+      "best_match": {
+        "source": "isbn",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=A5o6PgAACAAJ&printsec=frontcover&img=1&zoom=1&source=gbs_api",
+        "title": "星の王子さま",
+        "authors": [
+          "サン=テグジュペリ,A. de"
+        ],
+        "reason": "found"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "坊っちゃん",
+        "author": "夏目漱石",
+        "isbn": ""
+      },
+      "isbn_search": null,
+      "title_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=QR-lQWgBpI4C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        "title": "坊っちゃん",
+        "authors": [
+          "夏目漱石"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "坊っちゃん 夏目漱石"
+      },
+      "best_match": {
+        "source": "title",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=QR-lQWgBpI4C&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        "title": "坊っちゃん",
+        "authors": [
+          "夏目漱石"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "坊っちゃん 夏目漱石"
+      },
+      "recommendations": []
+    },
+    {
+      "book": {
+        "title": "銀河鉄道の夜",
+        "author": "宮沢賢治",
+        "isbn": ""
+      },
+      "isbn_search": null,
+      "title_search": {
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=lXAqEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        "title": "銀河鉄道の夜",
+        "authors": [
+          "宮沢賢治"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "銀河鉄道の夜 宮沢賢治"
+      },
+      "best_match": {
+        "source": "title",
+        "success": true,
+        "image_url": "http://books.google.com/books/content?id=lXAqEAAAQBAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api",
+        "title": "銀河鉄道の夜",
+        "authors": [
+          "宮沢賢治"
+        ],
+        "match_type": "exact",
+        "similarity": 100,
+        "query_used": "銀河鉄道の夜 宮沢賢治"
+      },
+      "recommendations": []
+    }
+  ]
+}

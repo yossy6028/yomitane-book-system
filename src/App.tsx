@@ -316,6 +316,7 @@ const SurveyStep: React.FC<{
             <option key={age} value={age}>{age}歳</option>
           ))}
         </select>
+        {/* 初期年齢入力時は学年表示を行わない
         {gradeInfo && (
           <div className="grade-info" style={{ marginTop: '10px', padding: '10px', backgroundColor: '#f0f8f0', borderRadius: '8px' }}>
             <p><strong>学年：{gradeInfo.gradeLabel}</strong></p>
@@ -324,6 +325,7 @@ const SurveyStep: React.FC<{
             )}
           </div>
         )}
+        */}
       </div>
 
       <div className="form-group">

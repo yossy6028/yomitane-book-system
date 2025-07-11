@@ -89,6 +89,11 @@ class RecommendationService {
     const scoredBooks: RecommendationResult[] = [];
 
     allBooks.forEach(book => {
+      // 年齢チェック：±2歳までのみ許可
+      if (!this.isAgeCompatible(book, userProfile.age, 2)) {
+        return; // 年齢が大幅に離れている本はスキップ
+      }
+
       const recommendation = this.scoreBook(book, userProfile);
       if (recommendation.score > 50) { // 厳密な閾値
         scoredBooks.push(recommendation);
@@ -106,7 +111,7 @@ class RecommendationService {
     // ユーザーが選択した各興味分野について最低1冊ずつ確保
     userProfile.interests.forEach(selectedInterest => {
       const matchingBooks = allBooks.filter(book => {
-        // 年齢適合性チェック（±2歳の緩和許可）
+        // 年齢適合性チェック（±2歳まで許可）
         const ageMatch = this.isAgeCompatible(book, userProfile.age, 2);
         
         // 興味分野マッチングチェック（直接マッチまたはカテゴリマッチ）
@@ -337,7 +342,12 @@ class RecommendationService {
       personalityMatch: [] as string[]
     };
 
-    // 緩和された年齢スコア（±3歳まで許容）
+    // 年齢チェック：±2歳までのみ許可
+    if (!this.isAgeCompatible(book, profile.age, 2)) {
+      return { book, score: 0, reasons: ['年齢が大幅に離れているため対象外'], matchDetails };
+    }
+    
+    // 緩和された年齢スコア（±2歳まで許容）
     const relaxedAgeScore = this.calculateRelaxedAgeScore(book, profile.age);
     score += relaxedAgeScore;
     if (relaxedAgeScore > 0) {
@@ -383,7 +393,7 @@ class RecommendationService {
     };
   }
 
-  // 緩和された年齢スコア（±3歳まで許容）
+  // 緩和された年齢スコア（±2歳まで許容）
   private calculateRelaxedAgeScore(book: Book, userAge: number): number {
     const bookMinAge = book.ageRange.min;
     const bookMaxAge = book.ageRange.max;
@@ -391,6 +401,11 @@ class RecommendationService {
     // 完全一致
     if (userAge >= bookMinAge && userAge <= bookMaxAge) {
       return 25;
+    }
+    
+    // ±2歳以内のチェック
+    if (!this.isAgeCompatible(book, userAge, 2)) {
+      return 0; // ±2歳を超える場合は対象外
     }
     
     // ±3歳以内の緩和
