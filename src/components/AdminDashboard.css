@@ -1,0 +1,464 @@
+.admin-dashboard {
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background: #f8f9fa;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  color: #333;
+  font-size: 2rem;
+}
+
+.back-button {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.back-button:hover {
+  background: #5a6268;
+  transform: translateY(-1px);
+}
+
+.dashboard-tabs {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dashboard-tabs button {
+  background: #f8f9fa;
+  color: #666;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+  font-weight: 500;
+}
+
+.dashboard-tabs button:hover {
+  background: #e9ecef;
+  color: #333;
+}
+
+.dashboard-tabs button.active {
+  background: #007bff;
+  color: white;
+}
+
+.dashboard-content {
+  min-height: 500px;
+}
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 概要セクション */
+.overview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.stat-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+}
+
+.stat-card.full-width {
+  grid-column: 1 / -1;
+}
+
+.stat-card h3 {
+  margin: 0 0 1.5rem 0;
+  color: #333;
+  font-size: 1.2rem;
+  border-bottom: 2px solid #007bff;
+  padding-bottom: 0.5rem;
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+.stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #007bff;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: #666;
+  text-align: right;
+}
+
+.distribution-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.distribution-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.distribution-label {
+  min-width: 200px;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.distribution-bar {
+  flex: 1;
+  height: 25px;
+  background: #f0f0f0;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.distribution-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #007bff, #0056b3);
+  transition: width 0.3s ease;
+}
+
+.distribution-count {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.8rem;
+  color: #333;
+  font-weight: 600;
+}
+
+.top-books {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.book-rank-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.8rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.book-rank-item:hover {
+  background: #e9ecef;
+}
+
+.rank {
+  font-weight: 700;
+  color: #007bff;
+  min-width: 30px;
+}
+
+.book-title {
+  flex: 1;
+  font-weight: 600;
+  color: #333;
+}
+
+.read-count {
+  font-size: 0.9rem;
+  color: #666;
+  min-width: 80px;
+}
+
+.average-rating {
+  font-size: 0.9rem;
+  color: #666;
+  min-width: 60px;
+}
+
+/* テーブルセクション */
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section-header h3 {
+  margin: 0;
+  color: #333;
+}
+
+.export-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.export-button:hover {
+  background: #218838;
+  transform: translateY(-1px);
+}
+
+.date-range-selector {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.date-range-selector label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.date-range-selector input {
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.users-table,
+.books-table,
+.activity-table {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.users-table table,
+.books-table table,
+.activity-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.users-table th,
+.books-table th,
+.activity-table th {
+  background: #f8f9fa;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 2px solid #dee2e6;
+}
+
+.users-table td,
+.books-table td,
+.activity-table td {
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  color: #666;
+}
+
+.users-table tr:hover,
+.books-table tr:hover,
+.activity-table tr:hover {
+  background: #f8f9fa;
+}
+
+.status {
+  padding: 0.3rem 0.8rem;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.status.active {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status.inactive {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.action-tag {
+  padding: 0.3rem 0.8rem;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  background: #e9ecef;
+  color: #495057;
+}
+
+.action-tag.login {
+  background: #d4edda;
+  color: #155724;
+}
+
+.action-tag.logout {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.action-tag.start_reading {
+  background: #d1ecf1;
+  color: #0c5460;
+}
+
+.action-tag.finish_reading {
+  background: #d4edda;
+  color: #155724;
+}
+
+.action-tag.take_test {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.action-tag.set_goal {
+  background: #e2e3e5;
+  color: #383d41;
+}
+
+.action-tag.coach_session {
+  background: #f4cccc;
+  color: #5f2120;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+  .admin-dashboard {
+    padding: 1rem;
+  }
+  
+  .dashboard-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .dashboard-tabs {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .overview-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-header {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .date-range-selector {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .users-table,
+  .books-table,
+  .activity-table {
+    overflow-x: auto;
+  }
+  
+  .users-table table,
+  .books-table table,
+  .activity-table table {
+    min-width: 600px;
+  }
+}
+
+/* 印刷時のスタイル */
+@media print {
+  .admin-dashboard {
+    padding: 0;
+    background: white;
+  }
+  
+  .dashboard-header,
+  .dashboard-tabs {
+    display: none;
+  }
+  
+  .stat-card {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+  
+  .users-table,
+  .books-table,
+  .activity-table {
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
+}

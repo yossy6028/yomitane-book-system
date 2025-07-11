@@ -1,38 +1,1161 @@
+/* 子ども向けの楽しいデザイン */
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f5dc 0%, #e8dcc6 100%);
+  font-family: 'Hiragino Maru Gothic ProN', 'ヒラギノ丸ゴ ProN', 'Meiryo UI', 'メイリオ', 'Rounded Mplus 1c', sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
 .App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+  padding: 20px;
+  color: #2d4a3d;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header-content {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  text-align: center;
+}
+
+.header-auth {
+  margin-top: 1rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.welcome-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2d4a3d;
+  margin-bottom: 0.3rem;
+}
+
+.login-button,
+.logout-button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-width: 120px;
+}
+
+.login-button:hover,
+.logout-button:hover {
+  background: #45a049;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.logout-button {
+  background: #f44336;
+}
+
+.logout-button:hover {
+  background: #da190b;
+}
+
+.yomitane-logo {
+  height: 200px;
+  width: auto;
+  max-width: 800px;
+  margin-bottom: 15px;
+  object-fit: contain;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
+  border-radius: 20px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.9), rgba(255,255,255,0.5));
+  padding: 15px;
+  backdrop-filter: blur(15px);
+  border: 2px solid rgba(255,255,255,0.4);
+}
+
+.app-subtitle {
+  font-family: 'Hiragino Maru Gothic ProN', 'ヒラギノ丸ゴ ProN', 'Meiryo UI', 'メイリオ', 'Rounded Mplus 1c', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #2d4a3d;
+  margin: 0 0 15px 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.15);
+  filter: drop-shadow(0 2px 4px rgba(45, 74, 61, 0.3));
+  letter-spacing: 0.5px;
+}
+
+.App-header h1 {
+  font-size: 2.5rem;
+  margin: 0;
+  animation: bounce 2s infinite;
+}
+
+.App-header p {
+  font-size: 1.3rem;
+  margin: 15px 0;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #4a6741;
+  letter-spacing: 0.5px;
+}
+
+.welcome-description {
+  font-size: 1.1rem;
+  line-height: 1.8;
+  color: #666;
+  margin: 20px 0 30px 0;
+  text-align: center;
+}
+
+/* Footer styles */
+.App-footer {
+  padding: 40px 20px 20px 20px;
+  text-align: center;
+  background: transparent;
+  margin-top: auto;
+}
+
+.tanemo-footer-logo {
+  height: 120px;
+  width: auto;
+  max-width: 600px;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.tanemo-footer-logo:hover {
+  opacity: 1;
+}
+
+.App-main {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  flex: 1;
+}
+
+/* ステップコンテナ */
+.step-container {
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 248, 248, 0.9));
+  border-radius: 25px;
+  padding: 35px;
+  margin: 25px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15), inset 0 2px 8px rgba(255, 255, 255, 0.8);
+  animation: slideIn 0.5s ease-out;
+  border: 3px solid rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+}
+
+.step-container h2 {
+  color: #2d4a3d;
+  font-size: 2.2rem;
+  margin-bottom: 25px;
+  font-family: 'Hiragino Maru Gothic ProN', 'ヒラギノ丸ゴ ProN', 'Meiryo UI', 'メイリオ', 'Rounded Mplus 1c', sans-serif;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+  filter: drop-shadow(0 2px 4px rgba(45, 74, 61, 0.2));
+}
+
+/* テスト情報スタイル */
+.test-info {
+  font-size: 0.9rem;
+  color: #666;
+  font-style: italic;
+  margin-bottom: 20px;
+  padding: 8px 12px;
+  background-color: #f0f8ff;
+  border-radius: 8px;
+  border-left: 4px solid #4169e1;
+}
+
+/* 問題ヘッダー */
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 10px;
+}
+
+.question-type {
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: bold;
+  margin-left: 10px;
+  flex-shrink: 0;
+}
+
+.question-type.vocabulary {
+  background-color: #e3f2fd;
+  color: #1976d2;
+  border: 1px solid #bbdefb;
+}
+
+.question-type.common_sense {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+  border: 1px solid #e1bee7;
+}
+
+/* テスト分析結果 */
+.test-analysis {
+  margin-top: 15px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #28a745;
+}
+
+.test-analysis h4 {
+  margin: 0 0 10px 0;
+  color: #2d4a3d;
+}
+
+.analysis-section {
+  margin: 10px 0;
+}
+
+.analysis-section ul {
+  margin: 5px 0 10px 20px;
+  padding: 0;
+}
+
+.analysis-section li {
+  margin: 3px 0;
+  font-size: 0.9rem;
+}
+
+.analysis-section.strengths strong {
+  color: #28a745;
+}
+
+.analysis-section.recommendations strong {
+  color: #007bff;
+}
+
+/* フォーム要素 */
+.form-group {
+  margin: 20px 0;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 12px;
+  font-weight: bold;
+  color: #2d4a3d;
+  font-size: 1.2rem;
+  font-family: 'Hiragino Maru Gothic ProN', 'ヒラギノ丸ゴ ProN', 'Meiryo UI', 'メイリオ', 'Rounded Mplus 1c', sans-serif;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.form-group select {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  font-size: 1.1rem;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.95), rgba(248, 248, 248, 0.9));
+  box-shadow: inset 0 2px 4px rgba(0,0,0,0.1), 0 2px 8px rgba(0,0,0,0.05);
+  font-family: 'Hiragino Maru Gothic ProN', 'ヒラギノ丸ゴ ProN', 'Meiryo UI', 'メイリオ', 'Rounded Mplus 1c', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.checkbox-group {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.9), rgba(248, 248, 248, 0.8));
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08), inset 0 1px 2px rgba(255, 255, 255, 0.8);
+  font-family: 'Hiragino Maru Gothic ProN', 'ヒラギノ丸ゴ ProN', 'Meiryo UI', 'メイリオ', 'Rounded Mplus 1c', sans-serif;
+}
+
+.checkbox-label:hover {
+  background: linear-gradient(145deg, rgba(248, 249, 240, 0.95), rgba(235, 240, 230, 0.9));
+  border-color: #5a7c65;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(90, 124, 101, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.9);
+}
+
+.checkbox-label input {
+  margin-right: 8px;
+  transform: scale(1.2);
+}
+
+/* テスト問題 */
+.question {
+  background: #f7fafc;
+  padding: 20px;
+  border-radius: 15px;
+  margin: 20px 0;
+  text-align: left;
+}
+
+.question-word {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #5a7c65;
+  text-align: center;
+  margin: 15px 0;
+}
+
+.radio-group {
+  margin-top: 15px;
+}
+
+.radio-group label {
+  display: block;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.radio-group label:hover {
+  background-color: #edf2f7;
+}
+
+.radio-group input {
+  margin-right: 10px;
+  transform: scale(1.2);
+}
+
+/* ボタン */
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 30px;
+  gap: 15px;
+}
+
+.welcome-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  margin: 30px 0;
+}
+
+.primary-button, .secondary-button, .admin-button {
+  padding: 18px 35px;
+  border: none;
+  border-radius: 30px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+  font-family: 'Hiragino Maru Gothic ProN', 'ヒラギノ丸ゴ ProN', 'Meiryo UI', 'メイリオ', 'Rounded Mplus 1c', sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.primary-button {
+  background: linear-gradient(145deg, #6b8e6b, #4a6b57);
+  color: white;
+  box-shadow: 0 8px 20px rgba(90, 124, 101, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.primary-button:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(90, 124, 101, 0.6), inset 0 3px 6px rgba(255, 255, 255, 0.3);
+  background: linear-gradient(145deg, #7ba17b, #5a7c65);
+}
+
+.secondary-button {
+  background: linear-gradient(145deg, #f0e6d2, #e8dcc6);
+  color: #2d4a3d;
+  box-shadow: 0 6px 15px rgba(232, 220, 198, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.6);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.secondary-button:hover {
+  background: linear-gradient(145deg, #ecd8b8, #d4c4a8);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(232, 220, 198, 0.6), inset 0 3px 6px rgba(255, 255, 255, 0.7);
+}
+
+.admin-button {
+  background: linear-gradient(145deg, #f5a3ff, #f093fb, #f5576c);
+  color: white;
+  box-shadow: 0 8px 20px rgba(240, 147, 251, 0.4), inset 0 2px 4px rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.1);
+}
+
+.admin-button:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: 0 12px 30px rgba(240, 147, 251, 0.6), inset 0 3px 6px rgba(255, 255, 255, 0.3);
+  background: linear-gradient(145deg, #ff9bff, #f093fb, #f5576c);
+}
+
+/* Welcome画面の機能紹介 */
+.welcome-features {
+  margin-top: 40px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 15px;
+  background: linear-gradient(135deg, #e8f5e8 0%, #d4e5d4 100%);
+  border-radius: 15px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+.feature-icon {
+  font-size: 2rem;
+}
+
+.feature-text {
+  font-size: 1.1rem;
+  color: #2d4a3d;
+  font-weight: bold;
+}
+
+/* 結果表示 */
+.results {
+  text-align: left;
+}
+
+.book-recommendation {
+  background: linear-gradient(135deg, #e8f5e8 0%, #d4e5d4 100%);
+  padding: 20px;
+  border-radius: 15px;
+  margin: 20px 0;
+}
+
+.book-recommendation h3 {
+  color: #2d4a3d;
+  margin-bottom: 15px;
+}
+
+.book-item {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 10px 0;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.book-item strong {
+  color: #5a7c65;
+  font-size: 1.2rem;
+}
+
+/* アニメーション */
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ユーザープロフィール表示 */
+.user-summary {
+  background: linear-gradient(135deg, #f0f8f0 0%, #e0f0e0 100%);
+  padding: 20px;
+  border-radius: 15px;
+  margin-bottom: 25px;
+  border: 2px solid #5a7c65;
+}
+
+.user-summary h3 {
+  color: #2d4a3d;
+  margin-bottom: 15px;
+}
+
+.profile-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 10px;
+}
+
+.profile-item {
+  background: white;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1px solid #5a7c65;
+  font-weight: bold;
+  color: #2d4a3d;
+  font-size: 0.9rem;
+}
+
+.profile-interests, .profile-personality {
+  margin: 8px 0;
+  color: #2d4a3d;
+}
+
+/* 推薦リスト */
+.recommendations {
+  margin-top: 25px;
+}
+
+.recommendations h3 {
+  color: #4a5568;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+.no-recommendations {
+  text-align: center;
+  padding: 40px;
+  background: #fed7d7;
+  border-radius: 15px;
+  color: #c53030;
+}
+
+.recommendation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.recommendation-card {
+  background: white;
+  border: 3px solid #e2e8f0;
+  border-radius: 15px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.recommendation-card:hover {
+  border-color: #5a7c65;
+  box-shadow: 0 8px 25px rgba(90, 124, 101, 0.15);
+  transform: translateY(-2px);
+}
+
+.recommendation-card.selected {
+  border-color: #5a7c65;
+  background: #f8f9f0;
+  box-shadow: 0 8px 25px rgba(90, 124, 101, 0.2);
+}
+
+.recommendation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  margin-bottom: 15px;
+}
+
+.book-basic-info {
+  flex: 1;
+}
+
+.book-basic-info h4 {
+  color: #2d3748;
+  font-size: 1.3rem;
+  margin: 0 0 8px 0;
+  line-height: 1.3;
+}
+
+.book-author {
+  color: #4a5568;
+  font-size: 1rem;
+  margin: 0 0 10px 0;
+}
+
+.book-meta-compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.book-meta-compact span {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.age-range {
+  background: #f0f8f0;
+  color: #2d4a3d;
+}
+
+.reading-level {
+  background: #f8f9f0;
+  color: #2d4a3d;
+}
+
+.rating {
+  background: #fff5f5;
+  color: #c53030;
+}
+
+.match-score {
+  background: #5a7c65;
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.recommendation-cover {
+  width: 100px;
+  height: 130px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-@keyframes App-logo-spin {
+.recommendation-cover-placeholder {
+  width: 100px;
+  height: 130px;
+  background: linear-gradient(145deg, #f0f8f0, #e8f5e8);
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 8px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.recommendation-reasons {
+  background: #f8f9f0;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.recommendation-reasons strong {
+  color: #4a5568;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.recommendation-reasons ul {
+  margin: 0;
+  padding-left: 0;
+  color: #2d3748;
+  list-style: none;
+}
+
+.recommendation-reasons li {
+  margin-bottom: 4px;
+}
+
+.book-details {
+  border-top: 2px solid #e2e8f0;
+  padding-top: 20px;
+  margin-top: 15px;
+  animation: slideDown 0.3s ease-out;
+}
+
+@keyframes slideDown {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    max-height: 0;
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.book-description {
+  margin-bottom: 15px;
+}
+
+.book-description strong {
+  color: #4a5568;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.book-description p {
+  color: #2d3748;
+  line-height: 1.5;
+  background: white;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.book-categories, .book-interests {
+  margin-bottom: 15px;
+}
+
+.book-categories strong, .book-interests strong {
+  color: #4a5568;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.detailed-match {
+  margin-bottom: 15px;
+}
+
+.detailed-match strong {
+  color: #4a5568;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.match-indicators {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.match-indicator {
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.match-indicator.match {
+  background: #c6f6d5;
+  color: #22543d;
+}
+
+.match-indicator.no-match {
+  background: #fed7d7;
+  color: #c53030;
+}
+
+.reading-time {
+  background: #f8f9f0;
+  padding: 10px;
+  border-radius: 8px;
+  border-left: 4px solid #5a7c65;
+}
+
+.reading-time strong {
+  color: #2d4a3d;
+}
+
+.click-hint {
+  text-align: center;
+  margin-top: 15px;
+  padding: 8px;
+  background: #edf2f7;
+  border-radius: 8px;
+  color: #4a5568;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+/* テスト問題のスタイル調整 */
+.question {
+  margin-bottom: 20px;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+  .App-main {
+    padding: 10px;
+    margin: 0;
+  }
+  
+  .step-container {
+    margin: 10px;
+    padding: 20px;
+  }
+  
+  .checkbox-group {
+    grid-template-columns: 1fr;
+  }
+  
+  .button-group {
+    flex-direction: column;
+  }
+  
+  .App-header h1 {
+    font-size: 2rem;
+  }
+
+  .recommendation-header {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .book-meta-compact {
+    justify-content: center;
+  }
+
+  .profile-summary {
+    justify-content: center;
+  }
+
+  .match-indicators {
+    justify-content: center;
+  }
+
+  .recommendation-cover {
+    width: 80px;
+    height: 100px;
+  }
+}
+
+/* 興味分野セレクターのスタイル */
+.interest-selector {
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  background: #f8f9f0;
+  margin-top: 10px;
+}
+
+.category-selector {
+  margin-bottom: 20px;
+}
+
+.category-select {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  font-size: 1rem;
+  background: white;
+  color: #2d4a3d;
+  margin-top: 8px;
+}
+
+.subcategory-selector {
+  margin-bottom: 20px;
+}
+
+.subcategory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.interest-checkbox-label {
+  display: flex;
+  align-items: center;
+  padding: 10px 12px;
+  border: 2px solid #e2e8f0;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: white;
+  font-size: 0.9rem;
+}
+
+.interest-checkbox-label:hover {
+  background: #e8f5e8;
+  border-color: #5a7c65;
+  transform: translateY(-1px);
+}
+
+.interest-checkbox-label input {
+  margin-right: 8px;
+  transform: scale(1.2);
+}
+
+.interest-text {
+  font-weight: 500;
+  color: #2d4a3d;
+}
+
+.selected-interests {
+  border-top: 2px solid #e2e8f0;
+  padding-top: 15px;
+}
+
+.selected-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.selected-tag {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #5a7c65, #4a6b57);
+  color: white;
+  border-radius: 20px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  box-shadow: 0 2px 6px rgba(90, 124, 101, 0.3);
+}
+
+.remove-tag {
+  background: none;
+  border: none;
+  color: white;
+  margin-left: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: bold;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.remove-tag:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.1);
+}
+
+/* ユーザーウェルカムセクション */
+.user-welcome {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border-left: 5px solid #4CAF50;
+}
+
+.user-welcome p {
+  margin: 0.5rem 0;
+  color: #2d4a3d;
+}
+
+.user-welcome p:first-child {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #4CAF50;
+}
+
+/* 管理者ウェルカムセクション */
+.admin-welcome {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  padding: 1.5rem;
+  border-radius: 15px;
+  margin: 1.5rem 0;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  border-left: 5px solid #FFD700;
+  color: white;
+}
+
+.admin-welcome p {
+  margin: 0.5rem 0;
+  color: white;
+}
+
+.admin-welcome p:first-child {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #FFD700;
+}
+
+/* 管理者情報ヘッダー */
+.admin-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  padding: 1rem 1.5rem;
+  border-radius: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  border: 2px solid #FFD700;
+}
+
+.admin-welcome-text {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #FFD700;
+  margin-bottom: 0.3rem;
+}
+
+.admin-logout-button {
+  background: #FFD700;
+  color: #1e3c72;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 20px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-width: 140px;
+}
+
+.admin-logout-button:hover {
+  background: #FFA500;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(255, 215, 0, 0.4);
+}
+
+/* 新しいボタンスタイル */
+.dashboard-button {
+  background: linear-gradient(45deg, #FF6B6B, #FF8E8E);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  margin: 8px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dashboard-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+  background: linear-gradient(45deg, #FF5252, #FF7979);
+}
+
+.dashboard-button:active {
+  transform: translateY(0);
+}
+
+/* 管理者ログインボタン */
+.admin-login-button {
+  background: linear-gradient(45deg, #1e3c72, #2a5298);
+  color: #FFD700;
+  border: 2px solid #FFD700;
+  padding: 12px 24px;
+  margin: 8px;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(30, 60, 114, 0.3);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-login-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 60, 114, 0.4);
+  background: linear-gradient(45deg, #2a5298, #1e3c72);
+  color: #FFA500;
+  border-color: #FFA500;
+}
+
+.admin-login-button:active {
+  transform: translateY(0);
+}
+
+/* タブレット向けの中間サイズ調整 */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .App-header {
+    padding: 1.5rem;
+  }
+  
+  .header-auth {
+    margin-top: 1.5rem;
+  }
+  
+  .user-info {
+    padding: 0.8rem 1.2rem;
+  }
+  
+  .welcome-text {
+    font-size: 0.9rem;
+  }
+}
+
+/* レスポンシブデザインの改善 */
+@media (max-width: 768px) {
+  .App-header {
+    padding: 1rem;
+  }
+  
+  .header-content {
+    width: 100%;
+  }
+  
+  .header-auth {
+    margin-top: 1rem;
+  }
+  
+  .user-info {
+    padding: 0.8rem 1rem;
+    width: 100%;
+    max-width: 280px;
+  }
+  
+  .welcome-text {
+    font-size: 0.8rem;
+  }
+  
+  .welcome-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .primary-button,
+  .secondary-button,
+  .admin-button,
+  .dashboard-button {
+    width: 100%;
+    max-width: 300px;
   }
 }

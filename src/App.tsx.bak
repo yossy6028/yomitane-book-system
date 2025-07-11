@@ -1,104 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import './utils/emergencyDebug';
 import BookList from './components/BookList';
 import AdminPanel from './components/AdminPanel';
-import AdminDashboard from './components/AdminDashboard';
-import UserAuth from './components/UserAuth';
-import AdminLogin from './components/AdminLogin';
-import InterestSelection from './components/InterestSelection';
-import { CoverImage } from './components/CoverImage';
 import { UserProfile, recommendationService } from './services/recommendationService';
-import { userService } from './services/userService';
-import { adminAuthService } from './services/adminAuthService';
-import { User, AdminUser } from './types/User';
 import { generateMixedTest, calculateTestResult, analyzeTestPerformance, MixedTestQuestion } from './data/mixedTestQuestions';
-import { clearProblemBooksCache } from './utils/clearProblemCache';
-import { filterTextForGrade, ageToGradeLevel } from './utils/kanjiFilter';
-import { calculateGradeFromAge, getNewGradeMessage } from './utils/gradeCalculator';
-
-// Utility function for reading level labels
-const getReadingLevelLabel = (level: string) => {
-  switch (level) {
-    case '小学校低学年': return '小学校低学年';
-    case '小学校中学年': return '小学校中学年';
-    case '小学校低・中学年': return '小学校低・中学年'; // 旧形式との互換性
-    case '小学校高学年〜中学1・2年': return '小学校高学年〜中学1・2年';
-    case '高校受験レベル': return '高校受験レベル';
-    // 旧形式との互換性
-    case 'elementary-low': return '小学校低学年';
-    case 'elementary-mid': return '小学校中学年';
-    case 'elementary-high': return '小学校高学年';
-    case 'junior-high': return '小学校高学年〜中学1・2年';
-    default: return level;
-  }
-};
 
 function App() {
-  const [currentView, setCurrentView] = useState<'main' | 'books' | 'admin' | 'dashboard'>('main');
+  const [currentView, setCurrentView] = useState<'main' | 'books' | 'admin'>('main');
   const [currentStep, setCurrentStep] = useState(1);
   const [userProfile, setUserProfile] = useState<Partial<UserProfile>>({});
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [currentAdmin, setCurrentAdmin] = useState<AdminUser | null>(null);
-  const [showUserAuth, setShowUserAuth] = useState(false);
-  const [showAdminLogin, setShowAdminLogin] = useState(false);
-
-  // 初回レンダリング時に問題書籍のキャッシュをクリアし、ログイン状態を確認
-  useEffect(() => {
-    clearProblemBooksCache();
-    
-    // ログイン状態を確認
-    const user = userService.getCurrentUser();
-    if (user) {
-      setCurrentUser(user);
-      // ユーザー情報から UserProfile を構築
-      setUserProfile({
-        age: user.age,
-        interests: user.interests,
-        readingLevel: user.readingLevel,
-        vocabularyScore: user.vocabularyScore,
-        personalityTraits: user.personalityTraits,
-        previousBooks: [] // 読書履歴から後で設定
-      });
-    }
-
-    // 管理者ログイン状態を確認
-    const admin = adminAuthService.getCurrentAdmin();
-    if (admin) {
-      setCurrentAdmin(admin);
-    }
-  }, []);
-
-  const handleUserLogin = (user: User) => {
-    setCurrentUser(user);
-    setUserProfile({
-      age: user.age,
-      interests: user.interests,
-      readingLevel: user.readingLevel,
-      vocabularyScore: user.vocabularyScore,
-      personalityTraits: user.personalityTraits,
-      previousBooks: [] // 読書履歴から後で設定
-    });
-  };
-
-  const handleUserLogout = () => {
-    userService.logoutUser();
-    setCurrentUser(null);
-    setUserProfile({});
-    setCurrentStep(1);
-    setCurrentView('main');
-  };
-
-  const handleAdminLogin = (admin: AdminUser) => {
-    setCurrentAdmin(admin);
-    setCurrentView('dashboard'); // 管理者ログイン後はダッシュボードに移動
-  };
-
-  const handleAdminLogout = () => {
-    adminAuthService.adminLogout();
-    setCurrentAdmin(null);
-    setCurrentView('main');
-  };
 
   const renderView = () => {
     switch(currentView) {
@@ -106,8 +16,6 @@ function App() {
         return <BookList onBack={() => setCurrentView('main')} />;
       case 'admin':
         return <AdminPanel onBack={() => setCurrentView('main')} />;
-      case 'dashboard':
-        return <AdminDashboard onBack={() => setCurrentView('main')} />;
       case 'main':
       default:
         return renderMainSteps();
@@ -121,10 +29,6 @@ function App() {
           onNext={() => setCurrentStep(2)} 
           onViewBooks={() => setCurrentView('books')}
           onAdmin={() => setCurrentView('admin')}
-          onDashboard={() => setCurrentView('dashboard')}
-          onAdminLogin={() => setShowAdminLogin(true)}
-          currentUser={currentUser}
-          currentAdmin={currentAdmin}
         />;
       case 2:
         return <SurveyStep 
@@ -141,16 +45,9 @@ function App() {
           setUserProfile={setUserProfile}
         />;
       case 4:
-        return <InterestSelection 
-          onNext={() => setCurrentStep(5)} 
-          onBack={() => setCurrentStep(3)}
-          userProfile={userProfile}
-          setUserProfile={setUserProfile}
-        />;
-      case 5:
         return <ResultsStep 
           userProfile={userProfile as UserProfile} 
-          onBack={() => setCurrentStep(4)} 
+          onBack={() => setCurrentStep(3)} 
           onRestart={() => setCurrentStep(1)} 
         />;
       default:
@@ -158,10 +55,6 @@ function App() {
           onNext={() => setCurrentStep(2)} 
           onViewBooks={() => setCurrentView('books')}
           onAdmin={() => setCurrentView('admin')}
-          onDashboard={() => setCurrentView('dashboard')}
-          onAdminLogin={() => setShowAdminLogin(true)}
-          currentUser={currentUser}
-          currentAdmin={currentAdmin}
         />;
     }
   };
@@ -169,52 +62,13 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <div className="header-content">
-          <img src="/yomitane-logo.png" alt="ヨミタネ" className="yomitane-logo" />
-          <p className="app-subtitle">ＡＩと育てるあなただけの読書の森</p>
-          <div className="header-auth">
-            {currentAdmin ? (
-              <div className="admin-info">
-                <span className="admin-welcome-text">
-                  🏛️ 管理者 {currentAdmin.displayName}さん
-                </span>
-                <button className="admin-logout-button" onClick={handleAdminLogout}>
-                  管理者ログアウト
-                </button>
-              </div>
-            ) : currentUser ? (
-              <div className="user-info">
-                <span className="welcome-text">こんにちは、{currentUser.displayName}さん</span>
-                <button className="logout-button" onClick={handleUserLogout}>
-                  ログアウト
-                </button>
-              </div>
-            ) : (
-              <button className="login-button" onClick={() => setShowUserAuth(true)}>
-                ログイン / 新規登録
-              </button>
-            )}
-          </div>
-        </div>
+        <img src="/tanemo-logo.png" alt="TANEMO" className="tanemo-logo" />
+        <h1>本のおすすめシステム</h1>
+        <p>きみにぴったりの本を見つけよう！</p>
       </header>
       <main className="App-main">
         {renderView()}
       </main>
-      <footer className="App-footer">
-        <img src="/tanemo-logo.png" alt="TANEMO" className="tanemo-footer-logo" />
-      </footer>
-      {showUserAuth && (
-        <UserAuth 
-          onUserLogin={handleUserLogin}
-          onClose={() => setShowUserAuth(false)}
-        />
-      )}
-      {showAdminLogin && (
-        <AdminLogin 
-          onAdminLogin={handleAdminLogin}
-          onClose={() => setShowAdminLogin(false)}
-        />
-      )}
     </div>
   );
 }
@@ -224,57 +78,39 @@ const WelcomeStep: React.FC<{
   onNext: () => void;
   onViewBooks: () => void;
   onAdmin: () => void;
-  onDashboard: () => void;
-  onAdminLogin: () => void;
-  currentUser: User | null;
-  currentAdmin: AdminUser | null;
-}> = ({ onNext, onViewBooks, onAdmin, onDashboard, onAdminLogin, currentUser, currentAdmin }) => (
+}> = ({ onNext, onViewBooks, onAdmin }) => (
   <div className="step-container">
-    <h2>✨ 読書の旅をはじめましょう</h2>
-    <p className="welcome-description">
-      あなたの興味と読書レベルに合わせて、<br />
-      最適な本をAIがセレクトします
-    </p>
-    
-    {currentUser && (
-      <div className="user-welcome">
-        <p>👋 {currentUser.displayName}さん、お帰りなさい！</p>
-        <p>年齢: {currentUser.age}歳 | 読書レベル: {currentUser.readingLevel}</p>
-        <p>興味分野: {currentUser.interests.join('・')}</p>
-      </div>
-    )}
-
-    {currentAdmin && (
-      <div className="admin-welcome">
-        <p>🏛️ 管理者 {currentAdmin.displayName}さん、お疲れ様です</p>
-        <p>役割: {currentAdmin.role} | 部署: {currentAdmin.department}</p>
-        <p>最終ログイン: {new Date(currentAdmin.lastLoginAt).toLocaleString()}</p>
-      </div>
-    )}
+    <h2>🌟 はじめに</h2>
+    <p>こんにちは！このシステムでは、きみの年齢や好きなことを教えてもらって、ぴったりの本をおすすめします。</p>
+    <p>簡単なアンケートと小さなテストがあるよ。</p>
     
     <div className="welcome-buttons">
       <button className="primary-button" onClick={onNext}>
-        📖 おすすめ本を調べる
+        はじめる 🚀
       </button>
       
       <button className="secondary-button" onClick={onViewBooks}>
-        📚 図書ライブラリー
+        📚 図書一覧を見る
       </button>
       
-      {currentAdmin ? (
-        <>
-          <button className="admin-button" onClick={onAdmin}>
-            ⚙️ 管理者パネル
-          </button>
-          <button className="dashboard-button" onClick={onDashboard}>
-            📊 本部ダッシュボード
-          </button>
-        </>
-      ) : (
-        <button className="admin-login-button" onClick={onAdminLogin}>
-          🏛️ 本部ログイン
-        </button>
-      )}
+      <button className="admin-button" onClick={onAdmin}>
+        ⚙️ 管理者パネル
+      </button>
+    </div>
+    
+    <div className="welcome-features">
+      <div className="feature-item">
+        <span className="feature-icon">🎯</span>
+        <span className="feature-text">きみにあった本を見つける</span>
+      </div>
+      <div className="feature-item">
+        <span className="feature-icon">📖</span>
+        <span className="feature-text">たくさんの本から選べる</span>
+      </div>
+      <div className="feature-item">
+        <span className="feature-icon">🔄</span>
+        <span className="feature-text">定期的に新しい本が追加される</span>
+      </div>
     </div>
   </div>
 );
@@ -286,70 +122,113 @@ const SurveyStep: React.FC<{
   userProfile: Partial<UserProfile>,
   setUserProfile: (profile: Partial<UserProfile>) => void
 }> = ({ onNext, onBack, userProfile, setUserProfile }) => {
+  const [selectedInterests, setSelectedInterests] = useState<string[]>(userProfile.interests || []);
   const [age, setAge] = useState<number>(userProfile.age || 0);
   const [readingLevel, setReadingLevel] = useState<string>(userProfile.readingLevel || '');
-
-  // 学年情報を計算
-  const gradeInfo = age > 0 ? calculateGradeFromAge(age) : null;
-  const newGradeMessage = gradeInfo ? getNewGradeMessage(gradeInfo) : '';
+  const [personality, setPersonality] = useState<string[]>(userProfile.personalityTraits || []);
 
   const handleNext = () => {
     setUserProfile({
       ...userProfile,
       age,
-      readingLevel: readingLevel as '小学校低学年' | '小学校中学年' | '小学校高学年〜中学1・2年' | '高校受験レベル',
-      personalityTraits: [],
-      gradeInfo: gradeInfo || undefined
+      interests: selectedInterests,
+      readingLevel: readingLevel as '小学校低学年' | '小学校中学年' | '小学校高学年' | '中学生' | '中学受験レベル' | '高校受験レベル',
+      personalityTraits: personality
     });
     onNext();
   };
 
+  const handleInterestChange = (interest: string, checked: boolean) => {
+    if (checked) {
+      setSelectedInterests([...selectedInterests, interest]);
+    } else {
+      setSelectedInterests(selectedInterests.filter(i => i !== interest));
+    }
+  };
+
+  const handlePersonalityChange = (trait: string, checked: boolean) => {
+    if (checked) {
+      setPersonality([...personality, trait]);
+    } else {
+      setPersonality(personality.filter(t => t !== trait));
+    }
+  };
+
   return (
     <div className="step-container">
-      <h2>📝 プロフィール設定</h2>
+      <h2>📝 アンケート</h2>
       
       <div className="form-group">
-        <label>年齢（ねんれい）:</label>
+        <label>年齢を教えてね:</label>
         <select value={age} onChange={(e) => setAge(Number(e.target.value))}>
-          <option value={0}>年齢を選んでね</option>
+          <option value={0}>選択してください</option>
           {Array.from({length: 10}, (_, i) => i + 6).map(age => (
             <option key={age} value={age}>{age}歳</option>
           ))}
         </select>
-        {gradeInfo && (
-          <div className="grade-info" style={{ marginTop: '10px', padding: '10px', backgroundColor: '#f0f8f0', borderRadius: '8px' }}>
-            <p><strong>学年：{gradeInfo.gradeLabel}</strong></p>
-            {newGradeMessage && (
-              <p style={{ color: '#ff6b9d', fontWeight: 'bold' }}>{newGradeMessage}</p>
-            )}
-          </div>
-        )}
       </div>
 
       <div className="form-group">
-        <label>読書レベル（どんな本が読める？）:</label>
+        <label>興味（きょうみ）があることは？ (いくつでも選んでね):</label>
+        <div className="checkbox-group">
+          {[
+            'スポーツ', '音楽', '絵を描く', 'ゲーム', '動物', '科学', '料理', '冒険',
+            '読書', '映画・アニメ', '工作・手芸', '歴史', '宇宙・天体', '乗り物',
+            '旅行・地理', '推理・謎解き', 'ファンタジー', '友情・恋愛', '家族', '学校生活'
+          ].map(interest => (
+            <label key={interest} className="checkbox-label">
+              <input 
+                type="checkbox" 
+                checked={selectedInterests.includes(interest)}
+                onChange={(e) => handleInterestChange(interest, e.target.checked)}
+              />
+              {interest}
+            </label>
+          ))}
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label>読書のレベルは？:</label>
         <select value={readingLevel} onChange={(e) => setReadingLevel(e.target.value)}>
-          <option value="">読みたい本の難しさを選んでね</option>
-          <option value="小学校低学年">初級レベル（やさしい本）</option>
-          <option value="小学校中学年">中級レベル（普通の本）</option>
-          <option value="小学校高学年〜中学1・2年">上級レベル（少し難しい本）</option>
-          <option value="高校受験レベル">上級プラス（難しい本・古典文学）</option>
+          <option value="">選択してください</option>
+          <option value="小学校低学年">低学年レベル（ひらがなが多い本）</option>
+          <option value="小学校中学年">中学年レベル（漢字まじりの本）</option>
+          <option value="小学校高学年">高学年レベル（少し難しい本）</option>
+          <option value="中学生">中学生レベル（難しい本もOK）</option>
+          <option value="中学受験レベル">中学受験レベル（高学年〜中学生向け）</option>
+          <option value="高校受験レベル">高校受験レベル（中学ハイレベル）</option>
         </select>
-        {gradeInfo && (
-          <p style={{ fontSize: '0.9rem', color: '#666', marginTop: '5px' }}>
-            おすすめレベル: {gradeInfo.readingLevel}
-          </p>
-        )}
+      </div>
+
+      <div className="form-group">
+        <label>きみの性格は？ (いくつでも選んでね):</label>
+        <div className="checkbox-group">
+          {[
+            '勇敢', '優しい', '好奇心旺盛', '活発', '芸術的', '思いやり', '論理的', 'ユーモア好き',
+            '慎重', '社交的', '内向的', '創造的', '責任感が強い', '自立している', '協調性がある', 'リーダーシップがある',
+            '感受性が豊か', '集中力がある', '冒険好き', '平和主義'
+          ].map(trait => (
+            <label key={trait} className="checkbox-label">
+              <input 
+                type="checkbox" 
+                checked={personality.includes(trait)}
+                onChange={(e) => handlePersonalityChange(trait, e.target.checked)}
+              />
+              {trait}
+            </label>
+          ))}
+        </div>
       </div>
 
       <div className="button-group">
-        <button className="secondary-button" onClick={onBack}>戻る</button>
+        <button className="secondary-button" onClick={onBack}>もどる</button>
         <button 
           className="primary-button" 
           onClick={handleNext}
-          disabled={!age || !readingLevel}
+          disabled={!age || selectedInterests.length === 0 || !readingLevel}
         >
-          次へ
+          つぎへ
         </button>
       </div>
     </div>
@@ -368,7 +247,7 @@ const TestStep: React.FC<{
 
   useEffect(() => {
     // 年齢に応じた語彙+常識の混合テストを生成（語彙5問 + 常識5問）
-    const mixedQuestions = generateMixedTest(userProfile.age || 7, 5, 5);
+    const mixedQuestions = generateMixedTest(userProfile.age || 10, 5, 5);
     setQuestions(mixedQuestions);
     setAnswers({}); // 問題が変わったら回答をリセット
   }, [userProfile.age]);
@@ -377,10 +256,10 @@ const TestStep: React.FC<{
   if (questions.length === 0) {
     return (
       <div className="step-container">
-        <h2>🧠 適性テスト</h2>
+        <h2>🧠 {userProfile.age}歳向けテスト</h2>
         <p>問題を準備しています...</p>
         <div className="button-group">
-          <button className="secondary-button" onClick={onBack}>戻る</button>
+          <button className="secondary-button" onClick={onBack}>もどる</button>
         </div>
       </div>
     );
@@ -400,24 +279,16 @@ const TestStep: React.FC<{
     onNext();
   };
 
-  // フィルタリングオプションを定数として定義（重複削減）
-  const filterOptions = {
-    gradeLevel: ageToGradeLevel(userProfile.age || 7),
-    allowHiragana: true,
-    allowKatakana: true,
-    strictMode: true
-  };
-
   return (
     <div className="step-container">
-      <h2>🧠 総合テスト（{userProfile.age}歳向け）</h2>
-      <p>きみの語彙力（ことばの学力）と常識力（いろんなことを知っているか）をチェックするよ！全部で{questions.length}問です。</p>
-      <p className="test-info">💡 このテストできみにぴったりの本を見つけられるよ！問題は毎回変わります</p>
+      <h2>🧠 {userProfile.age}歳向け総合テスト</h2>
+      <p>{userProfile.age}歳のきみの語彙力と常識力をチェックするよ！全部で{questions.length}問です。</p>
+      <p className="test-info">💡 語彙力と常識力の両方を測定し、問題は毎回ランダムに変わります</p>
       
       {questions.map((q, index) => (
         <div key={q.id} className="question">
           <div className="question-header">
-            <p><strong>{filterTextForGrade('問題', filterOptions)}{index + 1}:</strong> {filterTextForGrade(q.question, filterOptions)}</p>
+            <p><strong>問題{index + 1}:</strong> {q.question}</p>
             <span className={`question-type ${q.type}`}>
               {q.type === 'vocabulary' ? '📝語彙' : '🧭常識'}
             </span>
@@ -432,7 +303,7 @@ const TestStep: React.FC<{
                   checked={answers[q.id] === optIndex.toString()}
                   onChange={(e) => setAnswers({...answers, [q.id]: e.target.value})}
                 /> 
-                {filterTextForGrade(option, filterOptions)}
+                {option}
               </label>
             ))}
           </div>
@@ -467,7 +338,7 @@ const ResultsStep: React.FC<{
     const fetchRecommendations = async () => {
       setIsLoading(true);
       try {
-        const recs = await recommendationService.getRecommendations(userProfile, 6);
+        const recs = await recommendationService.getRecommendations(userProfile, 3);
         setRecommendations(recs);
       } catch (error) {
         console.error('推薦取得エラー:', error);
@@ -480,6 +351,22 @@ const ResultsStep: React.FC<{
     fetchRecommendations();
   }, [userProfile]);
 
+  const getReadingLevelLabel = (level: string) => {
+    switch (level) {
+      case '小学校低学年': return '低学年レベル';
+      case '小学校中学年': return '中学年レベル';
+      case '小学校高学年': return '高学年レベル';
+      case '中学生': return '中学生レベル';
+      case '中学受験レベル': return '中学受験レベル';
+      case '高校受験レベル': return '高校受験レベル';
+      // 旧形式との互換性
+      case 'elementary-low': return '低学年レベル';
+      case 'elementary-mid': return '中学年レベル';
+      case 'elementary-high': return '高学年レベル';
+      case 'junior-high': return '中学生レベル';
+      default: return level;
+    }
+  };
 
   const getStarRating = (rating: number) => {
     return '⭐'.repeat(Math.floor(rating)) + '☆'.repeat(5 - Math.floor(rating));
@@ -487,13 +374,13 @@ const ResultsStep: React.FC<{
 
   return (
     <div className="step-container">
-      <h2>🎉 きみにぴったりのおすすめ本（{userProfile.age}歳）</h2>
+      <h2>🎉 {userProfile.age}歳のきみにおすすめの本</h2>
       
       <div className="user-summary">
-        <h3>📋 きみの情報（プロフィール）</h3>
+        <h3>📋 きみのプロフィール</h3>
         <div className="profile-summary">
           <span className="profile-item">年齢: {userProfile.age}歳</span>
-          <span className="profile-item">読書レベル: {getReadingLevelLabel(userProfile.readingLevel || '')}</span>
+          <span className="profile-item">読書レベル: {getReadingLevelLabel(userProfile.readingLevel)}</span>
           <span className="profile-item">総合レベル: {userProfile.vocabularyScore}/10</span>
           {userProfile.testResult && (
             <>
@@ -502,15 +389,12 @@ const ResultsStep: React.FC<{
             </>
           )}
         </div>
-        {userProfile.gradeInfo && (
-          <div className="profile-interests">
-            <strong>学年:</strong> {userProfile.gradeInfo.gradeLabel}
-            {userProfile.gradeInfo.isNewGrade && <span style={{ color: '#ff6b9d' }}> 🌸新学年</span>}
-          </div>
-        )}
-        {userProfile.interests && userProfile.interests.length > 0 && (
-          <div className="profile-interests">
-            <strong>今回選んだ分野:</strong> {userProfile.interests.join('・')}
+        <div className="profile-interests">
+          <strong>好きなこと:</strong> {userProfile.interests.join('・')}
+        </div>
+        {userProfile.personalityTraits.length > 0 && (
+          <div className="profile-personality">
+            <strong>性格:</strong> {userProfile.personalityTraits.join('・')}
           </div>
         )}
         
@@ -548,7 +432,9 @@ const ResultsStep: React.FC<{
                       <span className="match-score">マッチ度: {Math.round(rec.score)}%</span>
                     </div>
                   </div>
-                  <CoverImage book={rec.book} className="recommendation-cover" />
+                  {rec.book.coverImage && (
+                    <img src={rec.book.coverImage} alt={rec.book.title} className="recommendation-cover" />
+                  )}
                 </div>
 
                 <div className="recommendation-reasons">
@@ -569,15 +455,15 @@ const ResultsStep: React.FC<{
                     
                     <div className="book-categories">
                       <strong>🏷️ ジャンル:</strong>
-                      {Array.from(new Set(rec.book.categories as string[])).map((cat, index) => (
-                        <span key={`${cat}-${index}`} className="category-tag">{cat}</span>
+                      {rec.book.categories.map((cat: string) => (
+                        <span key={cat} className="category-tag">{cat}</span>
                       ))}
                     </div>
 
                     <div className="book-interests">
                       <strong>🎯 興味分野:</strong>
-                      {Array.from(new Set(rec.book.interests as string[])).map((interest, index) => (
-                        <span key={`${interest}-${index}`} className="interest-tag">{interest}</span>
+                      {rec.book.interests.map((interest: string) => (
+                        <span key={interest} className="interest-tag">{interest}</span>
                       ))}
                     </div>
 
@@ -623,6 +509,5 @@ const ResultsStep: React.FC<{
     </div>
   );
 };
-
 
 export default App;

@@ -1,0 +1,385 @@
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { Book } from '../types/Book';
+import { UserProfile, RecommendationResult } from './recommendationService';
+import { bookService } from './bookService';
+
+interface GeminiRecommendationRequest {
+  userProfile: UserProfile;
+  availableBooks: Book[];
+  maxResults: number;
+}
+
+interface GeminiRecommendationResponse {
+  recommendations: Array<{
+    bookId: string;
+    score: number;
+    reasons: string[];
+    matchDetails: {
+      ageMatch: boolean;
+      interestMatch: string[];
+      levelMatch: boolean;
+      vocabularyMatch: boolean;
+      personalityMatch: string[];
+    };
+  }>;
+}
+
+class GeminiRecommendationService {
+  private genAI?: GoogleGenerativeAI;
+  private model?: any;
+
+  constructor() {
+    this.initializeIfConfigured();
+  }
+
+  private initializeIfConfigured() {
+    const apiKey = process.env.REACT_APP_GEMINI_API_KEY;
+    if (apiKey) {
+      this.genAI = new GoogleGenerativeAI(apiKey);
+      this.model = this.genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
+    }
+  }
+
+  // Gemini APIを使用した図書推薦
+  async getRecommendations(userProfile: UserProfile, maxResults: number = 5): Promise<RecommendationResult[]> {
+    if (!this.isConfigured()) {
+      throw new Error('Gemini API key not configured');
+    }
+    
+    try {
+      const allBooks = bookService.getAllBooks();
+      
+      // 大量の図書データを効率的に処理するため、事前フィルタリング
+      const candidateBooks = this.preFilterBooks(allBooks, userProfile);
+      
+      const request: GeminiRecommendationRequest = {
+        userProfile,
+        availableBooks: candidateBooks,
+        maxResults
+      };
+
+      const prompt = this.buildRecommendationPrompt(request);
+      const result = await this.model.generateContent(prompt);
+      const response = result.response;
+      const text = response.text();
+
+      try {
+        const geminiResponse: GeminiRecommendationResponse = JSON.parse(text);
+        return this.convertToRecommendationResults(geminiResponse, candidateBooks);
+      } catch (parseError) {
+        console.error('Gemini response parsing error:', parseError);
+        console.log('Gemini raw response:', text);
+        // フォールバック: 基本的なスコアリングを使用
+        return this.fallbackRecommendations(userProfile, candidateBooks, maxResults);
+      }
+    } catch (error) {
+      console.error('Gemini API error:', error);
+      // フォールバック: 基本的なスコアリングを使用
+      return this.fallbackRecommendations(userProfile, bookService.getAllBooks(), maxResults);
+    }
+  }
+
+  // 事前フィルタリング（緩和版・幅広い提案対応）
+  private preFilterBooks(allBooks: Book[], userProfile: UserProfile): Book[] {
+    return allBooks.filter(book => {
+      // 年齢範囲の基本チェック（緩和）
+      const ageOverlap = !(
+        book.ageRange.max < userProfile.age - 4 || 
+        book.ageRange.min > userProfile.age + 4
+      );
+      
+      // 読書レベルの適合性チェック（緩和）
+      const levelMatch = this.isLevelAppropriateRelaxed(book.readingLevel, userProfile.readingLevel);
+      
+      // 興味分野の基本マッチング（緩和）
+      const hasInterestMatch = userProfile.interests.some(interest => 
+        book.interests.includes(interest)
+      );
+      
+      // 既読本を除外
+      const isNotRead = !userProfile.previousBooks?.includes(book.id);
+      
+      // 条件緩和: レベルマッチまたは興味マッチまたは高評価のいずれかでOK
+      return ageOverlap && (levelMatch || hasInterestMatch || book.rating >= 4.2) && isNotRead;
+    }).slice(0, 80); // 最大80冊に拡大
+  }
+
+  // 読書レベルの適合性判定（厳格版）
+  private isLevelAppropriate(bookLevel: string, userLevel: string): boolean {
+    const levelPoints = { 
+      '小学校低学年': 1, 
+      '小学校中学年': 2, 
+      '小学校高学年': 3, 
+      '中学生': 4,
+      '中学受験〜中学生向け': 5,
+      '高校受験レベル': 6
+    };
+    
+    const userPoints = levelPoints[userLevel as keyof typeof levelPoints] || 3;
+    const bookPoints = levelPoints[bookLevel as keyof typeof levelPoints] || 3;
+    
+    // ±1レベルまで許容、ただし中学受験〜中学生向け以上は厳格に
+    if (userPoints >= 5) {
+      // 中学受験・高校受験レベルの場合は完全一致か1レベル上まで
+      return bookPoints >= userPoints && bookPoints <= userPoints + 1;
+    } else {
+      // それ以下のレベルは±1レベル許容
+      return Math.abs(userPoints - bookPoints) <= 1;
+    }
+  }
+
+  // 読書レベルの適合性判定（緩和版）
+  private isLevelAppropriateRelaxed(bookLevel: string, userLevel: string): boolean {
+    const levelPoints = { 
+      '小学校低学年': 1, 
+      '小学校中学年': 2, 
+      '小学校高学年': 3, 
+      '中学生': 4,
+      '中学受験〜中学生向け': 5,
+      '高校受験レベル': 6
+    };
+    
+    const userPoints = levelPoints[userLevel as keyof typeof levelPoints] || 3;
+    const bookPoints = levelPoints[bookLevel as keyof typeof levelPoints] || 3;
+    
+    // より緩い条件: ±2レベルまで許容
+    return Math.abs(userPoints - bookPoints) <= 2;
+  }
+
+  // Gemini API用のプロンプト構築
+  private buildRecommendationPrompt(request: GeminiRecommendationRequest): string {
+    const { userProfile, availableBooks, maxResults } = request;
+    
+    const booksData = availableBooks.map(book => ({
+      id: book.id,
+      title: book.title,
+      author: book.author,
+      description: book.description.substring(0, 200), // 長い説明文を短縮
+      ageRange: book.ageRange,
+      readingLevel: book.readingLevel,
+      vocabularyLevel: book.vocabularyLevel,
+      interests: book.interests,
+      categories: book.categories,
+      rating: book.rating
+    }));
+
+    return `あなたは子ども向け図書推薦の専門家です。以下のユーザープロフィールに基づいて、最適な図書を推薦してください。
+
+【ユーザープロフィール】
+- 年齢: ${userProfile.age}歳
+- 興味分野: ${userProfile.interests.join(', ')}
+- 読書レベル: ${userProfile.readingLevel}
+- 語彙力スコア: ${userProfile.vocabularyScore}/10
+- 性格特性: ${userProfile.personalityTraits.join(', ')}
+
+【利用可能な図書リスト】
+${JSON.stringify(booksData, null, 2)}
+
+【推薦要件】
+1. 年齢適合性を重視してください（最大30点）
+2. 興味分野とのマッチングを評価してください（最大25点）  
+3. 読書レベルの適合性を確認してください（最大20点）
+4. 語彙力レベルとの適合性を評価してください（最大15点）
+5. 性格特性との相性を考慮してください（最大10点）
+
+【出力形式】
+以下のJSON形式で回答してください：
+
+{
+  "recommendations": [
+    {
+      "bookId": "図書ID",
+      "score": 総合スコア（0-100点）,
+      "reasons": ["推薦理由1", "推薦理由2", "推薦理由3"],
+      "matchDetails": {
+        "ageMatch": true/false,
+        "interestMatch": ["マッチした興味分野"],
+        "levelMatch": true/false,
+        "vocabularyMatch": true/false,
+        "personalityMatch": ["マッチした性格特性"]
+      }
+    }
+  ]
+}
+
+最大${maxResults}冊を推薦し、スコア順に並べてください。推薦理由は子どもにもわかりやすい言葉で記述してください。`;
+  }
+
+  // Geminiレスポンスを標準形式に変換
+  private convertToRecommendationResults(
+    geminiResponse: GeminiRecommendationResponse, 
+    availableBooks: Book[]
+  ): RecommendationResult[] {
+    const results: RecommendationResult[] = [];
+    
+    for (const rec of geminiResponse.recommendations) {
+      const book = availableBooks.find(b => b.id === rec.bookId);
+      if (book) {
+        results.push({
+          book,
+          score: rec.score,
+          reasons: rec.reasons,
+          matchDetails: rec.matchDetails
+        });
+      }
+    }
+    
+    return results.sort((a, b) => b.score - a.score);
+  }
+
+  // フォールバック: 基本的なスコアリングシステム
+  private fallbackRecommendations(
+    userProfile: UserProfile, 
+    books: Book[], 
+    maxResults: number
+  ): RecommendationResult[] {
+    console.log('Using fallback recommendation system');
+    
+    const scoredBooks: RecommendationResult[] = [];
+
+    books.forEach(book => {
+      let score = 0;
+      const reasons: string[] = [];
+      const matchDetails = {
+        ageMatch: false,
+        interestMatch: [] as string[],
+        levelMatch: false,
+        vocabularyMatch: false,
+        personalityMatch: [] as string[]
+      };
+
+      // 年齢チェック
+      if (userProfile.age >= book.ageRange.min && userProfile.age <= book.ageRange.max) {
+        score += 30;
+        matchDetails.ageMatch = true;
+        reasons.push(`${userProfile.age}歳にぴったりの内容`);
+      }
+
+      // 読書レベルチェック（厳格）
+      if (this.isLevelAppropriate(book.readingLevel, userProfile.readingLevel)) {
+        score += 25;
+        matchDetails.levelMatch = true;
+        reasons.push('きみの読書レベルにちょうど良い');
+      } else {
+        // レベルが合わない場合は大幅減点
+        score -= 50;
+      }
+
+      // 興味分野チェック
+      const interestMatches = userProfile.interests.filter(interest => 
+        book.interests.includes(interest)
+      );
+      if (interestMatches.length > 0) {
+        score += interestMatches.length * 8;
+        matchDetails.interestMatch = interestMatches;
+        reasons.push(`${interestMatches.join('・')}が好きなきみにおすすめ`);
+      }
+
+      // 評価が高い本にボーナス
+      if (book.rating >= 4.5) {
+        score += 10;
+        const highRatingReasons = [
+          `評価${book.rating}点の高評価作品`,
+          `多くの読者から愛される良書`,
+          `口コミで人気の一冊`,
+          '読者満足度の高い作品',
+          '定評のある名作',
+          'おすすめ度の高い作品',
+          '評判の良い人気作',
+          '心に響く素晴らしい作品'
+        ];
+        const reasonIndex = book.id.charCodeAt(0) % highRatingReasons.length;
+        reasons.push(highRatingReasons[reasonIndex]);
+      }
+
+      // 既読本を除外
+      if (!userProfile.previousBooks?.includes(book.id) && score > 0) {
+        scoredBooks.push({
+          book,
+          score,
+          reasons,
+          matchDetails
+        });
+      }
+    });
+
+    return scoredBooks
+      .sort((a, b) => b.score - a.score)
+      .slice(0, maxResults);
+  }
+
+  // 特定の興味分野に基づく推薦（軽量版）
+  async getInterestBasedRecommendations(interests: string[], maxResults: number = 3): Promise<Book[]> {
+    if (!this.isConfigured()) {
+      return this.fallbackInterestBasedRecommendations(interests, maxResults);
+    }
+
+    try {
+      const allBooks = bookService.getAllBooks();
+      const candidateBooks = allBooks.filter(book => 
+        interests.some(interest => book.interests.includes(interest))
+      ).slice(0, 20);
+
+      if (candidateBooks.length === 0) {
+        return allBooks.slice(0, maxResults);
+      }
+
+      const prompt = `以下の興味分野に最も適した子ども向け図書を選んでください：
+興味分野: ${interests.join(', ')}
+
+利用可能な図書:
+${candidateBooks.map(book => `- ${book.title} (著者: ${book.author}) - ${book.interests.join(', ')}`).join('\n')}
+
+${maxResults}冊の図書タイトルを改行区切りで回答してください。タイトルのみ記載してください。`;
+
+      const result = await this.model.generateContent(prompt);
+      const response = result.response.text();
+      
+      const recommendedTitles = response.trim().split('\n').filter((line: string) => line.trim());
+      const recommendedBooks = recommendedTitles
+        .map((title: string) => candidateBooks.find(book => book.title.includes(title.replace(/^-\s*/, ''))))
+        .filter((book: Book | undefined): book is Book => book !== undefined)
+        .slice(0, maxResults);
+
+      // 十分な数が見つからない場合は、興味マッチングで補完
+      if (recommendedBooks.length < maxResults) {
+        const additionalBooks = candidateBooks
+          .filter(book => !recommendedBooks.includes(book))
+          .sort((a, b) => b.rating - a.rating)
+          .slice(0, maxResults - recommendedBooks.length);
+        
+        recommendedBooks.push(...additionalBooks);
+      }
+
+      return recommendedBooks;
+    } catch (error) {
+      console.error('Gemini interest-based recommendation error:', error);
+      // フォールバック
+      return this.fallbackInterestBasedRecommendations(interests, maxResults);
+    }
+  }
+
+  // フォールバック: 興味ベース推薦
+  private fallbackInterestBasedRecommendations(interests: string[], maxResults: number): Book[] {
+    return bookService.getAllBooks()
+      .filter(book => interests.some(interest => book.interests.includes(interest)))
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, maxResults);
+  }
+
+  // 年齢別推薦（軽量版）
+  async getAgeBasedRecommendations(age: number, maxResults: number = 3): Promise<Book[]> {
+    const allBooks = bookService.getAllBooks();
+    return allBooks
+      .filter(book => age >= book.ageRange.min && age <= book.ageRange.max)
+      .sort((a, b) => b.rating - a.rating)
+      .slice(0, maxResults);
+  }
+
+  // APIキーが設定されているかチェック
+  isConfigured(): boolean {
+    return !!process.env.REACT_APP_GEMINI_API_KEY && !!this.model;
+  }
+}
+
+export const geminiRecommendationService = new GeminiRecommendationService();
