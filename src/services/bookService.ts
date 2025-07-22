@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { Book, BookFilter, BookUpdateLog } from '../types/Book';
-import { initialBooks } from '../data/initialBooks';
+import { rawBooks } from '../data/initialBooks';
+import { validateNewBook } from '../utils/bookValidation';
 
 class BookService {
   private books: Book[] = [];
@@ -13,7 +14,7 @@ class BookService {
   // 初期データの読み込み（クリーンアップ版）
   private initializeBooks() {
     // 既存データをクリアして初期データのみ使用（表紙画像は自動適用済み）
-    this.books = [...initialBooks];
+    this.books = [...rawBooks] as Book[];
     this.saveBooks();
     console.log(`📚 ${this.books.length}冊の書籍データを読み込み完了（表紙画像付き）`);
   }
@@ -30,8 +31,15 @@ class BookService {
 
   // 全図書取得（初期データのみ、不適切図書完全除外）
   getAllBooks(): Book[] {
-    return this.books
-      .filter(book => this.isAppropriateForChildren(book))
+    // 重複を除去するためにIDでユニークにする
+    const uniqueBooks = new Map<string, Book>();
+    this.books.forEach(book => {
+      if (this.isAppropriateForChildren(book)) {
+        uniqueBooks.set(book.id, book);
+      }
+    });
+    
+    return Array.from(uniqueBooks.values())
       .sort((a, b) => {
         // 初期データ（manual）を優先表示
         if (a.source === 'manual' && b.source !== 'manual') return -1;
@@ -42,26 +50,33 @@ class BookService {
 
   // フィルタリング機能（適切な図書のみ）
   getFilteredBooks(filter: BookFilter): Book[] {
-    return this.books
-      .filter(book => this.isAppropriateForChildren(book))
-      .filter(book => {
+    // まず重複を除去
+    const uniqueBooks = this.getAllBooks();
+    
+    return uniqueBooks.filter(book => {
       // 年齢範囲フィルタ
       if (filter.ageRange) {
         const overlap = !(book.ageRange.max < filter.ageRange.min || book.ageRange.min > filter.ageRange.max);
         if (!overlap) return false;
       }
 
-      // 興味分野フィルタ
+      // 興味分野フィルタ（新3軸システム対応）
       if (filter.interests && filter.interests.length > 0) {
+        const allTags = [
+          ...(book.categories || []),
+          ...(book.interests || []),
+          ...(book.interest_tags || []),
+          ...(book.theme_tags || [])
+        ];
         const hasMatchingInterest = filter.interests.some(interest => 
-          book.interests.includes(interest)
+          allTags.includes(interest)
         );
         if (!hasMatchingInterest) return false;
       }
 
       // 読書レベルフィルタ
       if (filter.readingLevel && filter.readingLevel.length > 0) {
-        if (!filter.readingLevel.includes(book.readingLevel)) return false;
+        if (!filter.readingLevel.includes(book.readingLevel.toString())) return false;
       }
 
       // カテゴリフィルタ
@@ -200,7 +215,6 @@ class BookService {
       rating: volumeInfo.averageRating || 3.0,
       pageCount: volumeInfo.pageCount,
       isbn: volumeInfo.industryIdentifiers?.[0]?.identifier,
-      amazonUrl: '',
       libraryUrl: '',
       lastUpdated: new Date().toISOString().split('T')[0],
       source: 'google_books'
@@ -230,8 +244,8 @@ class BookService {
     return { min: 8, max: 14 };
   }
 
-  // 読書レベルの推定（新レベルシステム対応）
-  private estimateReadingLevel(volumeInfo: any): '小学校低学年' | '小学校中学年' | '小学校高学年〜中学1・2年' | '高校受験レベル' {
+  // 読書レベルの推定
+  private estimateReadingLevel(volumeInfo: any): string {
     const pageCount = volumeInfo.pageCount || 0;
     const categories = volumeInfo.categories || [];
     
@@ -243,8 +257,9 @@ class BookService {
     // ページ数による推定
     if (pageCount < 100) return '小学校低学年';
     if (pageCount < 200) return '小学校中学年';
-    if (pageCount < 350) return '小学校高学年〜中学1・2年';
-    return '高校受験レベル';
+    if (pageCount < 350) return '小学校高学年';
+    if (pageCount < 500) return '中学生';
+    return '高校生';
   }
 
   // 語彙レベルの推定
@@ -386,13 +401,17 @@ class BookService {
   }
 
   // 書籍の一括追加・更新
-  addOrUpdateBooks(books: Book[]): { added: number; updated: number } {
+  async addOrUpdateBooks(books: Book[]): Promise<{ added: number; updated: number; invalid: number; }> {
     let addedCount = 0;
     let updatedCount = 0;
-
-    books.forEach(book => {
+    let invalidCount = 0;
+    for (const book of books) {
+      const validation = await validateNewBook(book);
+      if (!validation.isValid) {
+        invalidCount++;
+        continue;
+      }
       const existingIndex = this.books.findIndex(existing => existing.id === book.id);
-      
       if (existingIndex >= 0) {
         // 既存の書籍を更新
         this.books[existingIndex] = {
@@ -408,10 +427,9 @@ class BookService {
         });
         addedCount++;
       }
-    });
-
+    }
     this.saveBooks();
-    return { added: addedCount, updated: updatedCount };
+    return { added: addedCount, updated: updatedCount, invalid: invalidCount };
   }
 
   // 統計情報取得
@@ -452,8 +470,14 @@ class BookService {
     const interestCounts: Record<string, number> = {};
     
     this.books.forEach(book => {
-      book.interests.forEach(interest => {
-        interestCounts[interest] = (interestCounts[interest] || 0) + 1;
+      // 新3軸システム対応
+      const allTags = [
+        ...(book.interests || []),
+        ...(book.interest_tags || []),
+        ...(book.theme_tags || [])
+      ];
+      allTags.forEach(tag => {
+        interestCounts[tag] = (interestCounts[tag] || 0) + 1;
       });
     });
 
@@ -464,9 +488,10 @@ class BookService {
     if (this.books.length === 0) return '';
     
     return this.books
-      .map(book => book.lastUpdated)
+      .map(book => book.lastUpdated || '')
+      .filter(date => date !== '')
       .sort()
-      .reverse()[0];
+      .reverse()[0] || '';
   }
 }
 

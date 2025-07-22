@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { UserProfile } from '../services/recommendationService';
 import { bookService } from '../services/bookService';
+import { Ruby, RubyText } from './Ruby';
+import standardTagDictionary from '../data/standardTagDictionary.json';
 import './InterestSelection.css';
 
 interface InterestSelectionProps {
@@ -19,22 +21,86 @@ const InterestSelection: React.FC<InterestSelectionProps> = ({
   const [selectedInterests, setSelectedInterests] = useState<string[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
 
-  // 興味分野カテゴリ定義
+  // 標準タグ辞書を使用したカテゴリー定義
   const interestCategories = {
-    '冒険・ファンタジー': ['冒険', 'ファンタジー', '魔法', '神秘', '英雄', '挑戦'],
-    '科学・技術': ['科学', '宇宙', '宇宙・天体', '技術', '実験', '未来技術', 'AI', 'SF', 'プログラミング'],
-    '動物・自然': ['動物', '自然', '植物', '昆虫', '海', '季節', '夏', '環境'],
-    'スポーツ・運動': ['スポーツ', 'サッカー', '野球', 'バスケットボール', '水泳', '競技', '運動'],
-    '芸術・文化': ['芸術', '音楽', '絵を描く', '絵画', '楽器', 'アート', '映画・アニメ', '創作', '創造'],
-    '歴史・社会': ['歴史', '江戸時代', '平安時代', '戦国時代', '明治時代', '社会', '政治', '経済', '文化'],
-    '友情・家族': ['友情', '友情・恋愛', '家族', '愛情', '愛', '心の成長', '情意'],
-    '学校・日常': ['学校生活', '日常', '成長', '青春', '学習', '教育', '子供'],
-    '推理・ミステリー': ['推理・謎解き', 'なぞとき', 'サスペンス', '緊張感', '謎'],
-    '料理・生活': ['料理', '食べ物', '食材', '健康', '生活', '日常生活'],
-    'ユーモア・エンタメ': ['ユーモア', '楽しさ', 'コメディ', 'エンターテイメント'],
-    '哲学・心理': ['哲学', '心理', '心理学', '思考', '精神', '意識', '内面'],
-    '国際・地理': ['せかいの国ぐに', '国際', '旅行・地理', '中国', '国際理解', '地域', '文化交流'],
-    '文学・言葉': ['文学', '言葉', '言語', '読書', '古典', '詩', '文章']
+    '📚 本のタイプで探す': standardTagDictionary.genres,
+    '🔬 知りたいことで探す': standardTagDictionary.subjects,
+    '💭 気持ちで探す': standardTagDictionary.themes
+  };
+
+  // カテゴリーごとの説明文
+  const categoryDescriptions = {
+    '📚 本のタイプで探す': '例：物語の本、なぞときの本、ぼうけんの本、絵がたくさんの本など',
+    '🔬 知りたいことで探す': '例：動物のこと、宇宙のこと、スポーツのこと、歴史のことなど',
+    '💭 気持ちで探す': '例：友だちっていいな、勇気が出る、希望がわく、大人になるってどんな感じ？など'
+  };
+
+  // 子ども向けの表示名変換
+  const getChildFriendlyName = (tag: string): string => {
+    const friendlyNames: Record<string, string> = {
+      // ジャンル
+      '小説': '物語の本',
+      '児童文学': '子どものための物語',
+      'ミステリー／推理': 'なぞときの本',
+      'ファンタジー': 'まほうや冒険の本',
+      'ＳＦ': '未来やロボットの本',
+      '歴史・時代': '昔の時代の本',
+      '恋愛': '恋や友情の本',
+      'ホラー': 'ちょっとこわい本',
+      '冒険': 'ぼうけんの本',
+      'ノンフィクション': '本当にあった話',
+      '伝記・自伝': '有名な人の本',
+      'エッセイ／随筆': '作者の思い出の本',
+      '詩': '詩の本',
+      '戯曲': '劇の本',
+      '絵本': '絵がたくさんの本',
+      'グラフィックノベル／漫画': 'マンガの本',
+      
+      // 興味分野
+      '科学': '科学の本',
+      'テクノロジー': 'コンピューターの本',
+      '自然': '自然の本',
+      '動物': '動物の本',
+      '植物': '植物の本',
+      '宇宙': '宇宙の本',
+      '環境': '地球環境の本',
+      '歴史': '歴史の本',
+      '地理・旅行': '地理と旅行の本',
+      '社会': '社会のしくみの本',
+      '政治': '政治の本',
+      '経済': 'お金や経済の本',
+      '文化': '文化の本',
+      '芸術': '芸術の本',
+      '音楽': '音楽の本',
+      'スポーツ': 'スポーツの本',
+      '料理・食': 'お料理の本',
+      '心理': '心の本',
+      '哲学': '考える本',
+      '宗教': '宗教の本',
+      '民俗': '昔からの習慣の本',
+      
+      // テーマ
+      '友情': '友だちの本',
+      '家族': '家族の本',
+      '成長・自立': '大人になる本',
+      '多様性・共生': 'みんなちがってみんないい本',
+      'いじめ': 'いじめについて考える本',
+      '勇気': '勇気が出る本',
+      '希望': '希望がわく本',
+      '正義': '正しいことを考える本',
+      '犠牲': 'だれかのために頑張る本',
+      '戦争と平和': '戦争と平和の本',
+      '環境保護': '地球を守る本',
+      '自己発見': '自分を見つける本',
+      '障がい': 'ハンディキャップの本',
+      '老い': '年をとることの本',
+      '死と生': 'いのちの本',
+      '移民・ルーツ': '外国から来た人の本',
+      '社会正義': 'みんなが幸せになる本',
+      'ジェンダー': '男の子女の子の本'
+    };
+    
+    return friendlyNames[tag] || tag;
   };
 
   const handleNext = () => {
@@ -74,29 +140,48 @@ const InterestSelection: React.FC<InterestSelectionProps> = ({
     }
   };
 
+  // 年齢に適したタグのみ表示するフィルタ
+  const isAgeAppropriate = (tag: string): boolean => {
+    if (!userProfile.age) return true;
+    
+    const ageRestrictedTags = {
+      8: ['恋愛', '戦争と平和', '死と生', '老い', 'ジェンダー'],
+      10: ['戦争と平和', '死と生', '老い'],
+      12: ['老い']
+    };
+    
+    for (const [ageLimit, restrictedTags] of Object.entries(ageRestrictedTags)) {
+      if (userProfile.age <= parseInt(ageLimit) && restrictedTags.includes(tag)) {
+        return false;
+      }
+    }
+    
+    return true;
+  };
+
   return (
     <div className="step-container">
-      <h2>🎯 今の気分で読みたい分野は？</h2>
+      <h2>🎯 今の気分で読みたい本は？</h2>
       <p className="step-description">
-        テスト結果に基づいて、きみにぴったりの本を探します。<br/>
-        <strong>今の気分</strong>で読みたい分野を選んでください。興味は変わってもOK！
+        きみのプロフィールに合わせて、ぴったりの本を探します。<br/>
+        <strong>今の気分</strong>で読みたいものを選んでください。いつでも変えられるよ！
       </p>
       
       <div className="test-result-summary">
         <h3>📊 きみのプロフィール</h3>
         <div className="profile-summary">
-          <span className="profile-item">年齢: {userProfile.age}歳</span>
+          <span className="profile-item"><RubyText.年齢 />: {userProfile.age}歳</span>
           {userProfile.gradeInfo && (
             <span className="profile-item">
-              学年: {userProfile.gradeInfo.gradeLabel}
-              {userProfile.gradeInfo.isNewGrade && <span className="new-grade">🌸新学年</span>}
+              <RubyText.学年 />: {userProfile.gradeInfo.gradeLabel}
+              {userProfile.gradeInfo.isNewGrade && <span className="new-grade">🌸<Ruby text="新学年" ruby="しんがくねん" /></span>}
             </span>
           )}
           <span className="profile-item">読書レベル: {userProfile.readingLevel}</span>
           {userProfile.testResult && (
             <>
-              <span className="profile-item">語彙力: {userProfile.testResult.vocabularyScore}/100</span>
-              <span className="profile-item">常識力: {userProfile.testResult.commonSenseScore}/100</span>
+              <span className="profile-item"><RubyText.語彙力 />: {userProfile.testResult.vocabularyScore}/100</span>
+              <span className="profile-item"><RubyText.常識力 />: {userProfile.testResult.commonSenseScore}/100</span>
             </>
           )}
         </div>
@@ -104,50 +189,58 @@ const InterestSelection: React.FC<InterestSelectionProps> = ({
 
       <div className="interest-selector">
         <div className="category-selector">
-          <label>大きな分野から選んでね:</label>
+          <label>どうやって本を探したい？</label>
           <select 
             value={selectedCategory} 
             onChange={handleCategoryChange}
             className="category-select"
           >
-            <option value="">どんな分野に興味がある？</option>
+            <option value="">⬇️ ここから選んでね</option>
             {Object.keys(interestCategories).map(category => (
               <option key={category} value={category}>{category}</option>
             ))}
           </select>
+          {selectedCategory && (
+            <p className="category-description">
+              {categoryDescriptions[selectedCategory as keyof typeof categoryDescriptions]}
+            </p>
+          )}
         </div>
       
         {currentSubcategories.length > 0 && (
           <div className="subcategory-selector">
-            <label>具体的に選んでね:</label>
+            <label>気になるものをえらんでね（いくつでもOK！）:</label>
             <div className="subcategory-grid">
-              {currentSubcategories.map(interest => {
-                const bookCount = getAvailableBookCount(interest);
-                return (
-                  <label key={interest} className="interest-checkbox-label">
-                    <input 
-                      type="checkbox" 
-                      checked={selectedInterests.includes(interest)}
-                      onChange={(e) => handleInterestChange(interest, e.target.checked)}
-                    />
-                    <span className="interest-text">
-                      {interest}
-                      {bookCount > 0 && <span className="book-count">({bookCount}冊)</span>}
-                    </span>
-                  </label>
-                );
-              })}
+              {currentSubcategories
+                .filter(tag => isAgeAppropriate(tag))
+                .map(interest => {
+                  const bookCount = getAvailableBookCount(interest);
+                  const displayName = getChildFriendlyName(interest);
+                  return (
+                    <label key={interest} className="interest-checkbox-label">
+                      <input 
+                        type="checkbox" 
+                        checked={selectedInterests.includes(interest)}
+                        onChange={(e) => handleInterestChange(interest, e.target.checked)}
+                      />
+                      <span className="interest-text">
+                        {displayName}
+                        {bookCount > 0 && <span className="book-count">({bookCount}冊)</span>}
+                      </span>
+                    </label>
+                  );
+                })}
             </div>
           </div>
         )}
         
         {selectedInterests.length > 0 && (
           <div className="selected-interests">
-            <label>選んだ分野:</label>
+            <label>選んだもの:</label>
             <div className="selected-tags">
               {selectedInterests.map(interest => (
                 <span key={interest} className="selected-tag">
-                  {interest}
+                  {getChildFriendlyName(interest)}
                   <button 
                     type="button"
                     onClick={() => handleInterestChange(interest, false)}
@@ -163,7 +256,7 @@ const InterestSelection: React.FC<InterestSelectionProps> = ({
       </div>
 
       <div className="mood-note">
-        <p>💡 <strong>ヒント:</strong> 気分が変わったら、また違う分野を選んで新しい本を探すことができるよ！</p>
+        <p>💡 <strong>ヒント:</strong> 気分が変わったら、いつでも違うものを選んで新しい本を探せるよ！</p>
       </div>
 
       <div className="button-group">

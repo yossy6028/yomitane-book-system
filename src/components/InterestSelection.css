@@ -89,6 +89,16 @@
   box-shadow: 0 0 0 3px rgba(90, 124, 101, 0.2);
 }
 
+.category-description {
+  margin-top: 10px;
+  font-size: 0.85rem;
+  color: #666;
+  background: rgba(90, 124, 101, 0.08);
+  padding: 10px 15px;
+  border-radius: 8px;
+  border-left: 3px solid #5a7c65;
+}
+
 .subcategory-selector {
   margin-bottom: 25px;
 }

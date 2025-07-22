@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import './utils/emergencyDebug';
 import BookList from './components/BookList';
 import AdminPanel from './components/AdminPanel';
 import AdminDashboard from './components/AdminDashboard';
@@ -8,12 +7,12 @@ import UserAuth from './components/UserAuth';
 import AdminLogin from './components/AdminLogin';
 import InterestSelection from './components/InterestSelection';
 import { CoverImage } from './components/CoverImage';
+import { Ruby, RubyText } from './components/Ruby';
 import { UserProfile, recommendationService } from './services/recommendationService';
 import { userService } from './services/userService';
 import { adminAuthService } from './services/adminAuthService';
 import { User, AdminUser } from './types/User';
 import { generateMixedTest, calculateTestResult, analyzeTestPerformance, MixedTestQuestion } from './data/mixedTestQuestions';
-import { clearProblemBooksCache } from './utils/clearProblemCache';
 import { filterTextForGrade, ageToGradeLevel } from './utils/kanjiFilter';
 import { calculateGradeFromAge, getNewGradeMessage } from './utils/gradeCalculator';
 
@@ -45,7 +44,6 @@ function App() {
 
   // 初回レンダリング時に問題書籍のキャッシュをクリアし、ログイン状態を確認
   useEffect(() => {
-    clearProblemBooksCache();
     
     // ログイン状態を確認
     const user = userService.getCurrentUser();
@@ -191,7 +189,7 @@ function App() {
               </div>
             ) : (
               <button className="login-button" onClick={() => setShowUserAuth(true)}>
-                ログイン / 新規登録
+                ログイン / <RubyText.登録 />
               </button>
             )}
           </div>
@@ -232,15 +230,15 @@ const WelcomeStep: React.FC<{
   <div className="step-container">
     <h2>✨ 読書の旅をはじめましょう</h2>
     <p className="welcome-description">
-      あなたの興味と読書レベルに合わせて、<br />
+      あなたの<RubyText.興味 />と読書レベルに合わせて、<br />
       最適な本をAIがセレクトします
     </p>
     
     {currentUser && (
       <div className="user-welcome">
         <p>👋 {currentUser.displayName}さん、お帰りなさい！</p>
-        <p>年齢: {currentUser.age}歳 | 読書レベル: {currentUser.readingLevel}</p>
-        <p>興味分野: {currentUser.interests.join('・')}</p>
+        <p><RubyText.年齢 />: {currentUser.age}歳 | 読書レベル: {currentUser.readingLevel}</p>
+        <p><RubyText.興味 /><RubyText.分野 />: {currentUser.interests.join('・')}</p>
       </div>
     )}
 
@@ -258,7 +256,7 @@ const WelcomeStep: React.FC<{
       </button>
       
       <button className="secondary-button" onClick={onViewBooks}>
-        📚 図書ライブラリー
+        📚 <RubyText.図書 />ライブラリー
       </button>
       
       {currentAdmin ? (
@@ -291,6 +289,7 @@ const SurveyStep: React.FC<{
 
   // 学年情報を計算
   const gradeInfo = age > 0 ? calculateGradeFromAge(age) : null;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const newGradeMessage = gradeInfo ? getNewGradeMessage(gradeInfo) : '';
 
   const handleNext = () => {
@@ -309,9 +308,9 @@ const SurveyStep: React.FC<{
       <h2>📝 プロフィール設定</h2>
       
       <div className="form-group">
-        <label>年齢（ねんれい）:</label>
+        <label><RubyText.年齢 />:</label>
         <select value={age} onChange={(e) => setAge(Number(e.target.value))}>
-          <option value={0}>年齢を選んでね</option>
+          <option value={0}><RubyText.年齢 />を選んでね</option>
           {Array.from({length: 10}, (_, i) => i + 6).map(age => (
             <option key={age} value={age}>{age}歳</option>
           ))}
@@ -332,10 +331,10 @@ const SurveyStep: React.FC<{
         <label>読書レベル（どんな本が読める？）:</label>
         <select value={readingLevel} onChange={(e) => setReadingLevel(e.target.value)}>
           <option value="">読みたい本の難しさを選んでね</option>
-          <option value="小学校低学年">初級レベル（やさしい本）</option>
-          <option value="小学校中学年">中級レベル（普通の本）</option>
-          <option value="小学校高学年〜中学1・2年">上級レベル（少し難しい本）</option>
-          <option value="高校受験レベル">上級プラス（難しい本・古典文学）</option>
+          <option value="小学校低学年"><RubyText.初級 />レベル（やさしい本）</option>
+          <option value="小学校中学年"><RubyText.中級 />レベル（普通の本）</option>
+          <option value="小学校高学年〜中学1・2年"><RubyText.上級 />レベル（少し難しい本）</option>
+          <option value="高校受験レベル"><RubyText.上級 />プラス（難しい本・古典文学）</option>
         </select>
         {gradeInfo && (
           <p style={{ fontSize: '0.9rem', color: '#666', marginTop: '5px' }}>

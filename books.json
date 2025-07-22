@@ -1,6 +1,4 @@
-import { Book } from '../types/Book';
-
-export const rawBooks: Book[] = [
+[
   {
     "id": "madogiwa_no_totto_chan",
     "title": "窓ぎわのトットちゃん",
@@ -10272,4 +10270,4 @@ export const rawBooks: Book[] = [
       "多様性・共生"
     ]
   }
-];
+]

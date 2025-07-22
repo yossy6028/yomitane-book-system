@@ -1,0 +1,57 @@
+/* ルビ（ふりがな）のスタイル */
+
+ruby {
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+rt {
+  font-size: 0.5em;
+  font-weight: normal;
+  color: #666;
+  /* ルビの位置調整 */
+  ruby-align: center;
+}
+
+/* 大きな画面でのルビサイズ調整 */
+@media (min-width: 768px) {
+  rt {
+    font-size: 0.45em;
+  }
+}
+
+/* 小さな画面でのルビサイズ調整 */
+@media (max-width: 480px) {
+  rt {
+    font-size: 0.55em;
+  }
+}
+
+/* ブラウザ互換性のためのフォールバック */
+/* Safariなど一部のブラウザ対応 */
+ruby {
+  display: inline-flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  vertical-align: bottom;
+}
+
+/* Internet Explorerサポート */
+@supports not (display: ruby) {
+  ruby {
+    display: inline-block;
+    position: relative;
+    padding-top: 0.6em;
+  }
+  
+  rt {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    font-size: 0.6em;
+    line-height: 1.2;
+  }
+}
