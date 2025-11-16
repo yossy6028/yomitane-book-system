@@ -1,0 +1,245 @@
+/* BookCardコンポーネントのスタイル */
+
+/* メインカードコンテナ */
+.book-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  transition: transform 0.2s, box-shadow 0.2s;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.book-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* ヘッダー部分 */
+.book-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 16px;
+}
+
+.book-card-header.no-cover {
+  display: block;
+}
+
+.book-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.book-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+}
+
+.book-author {
+  font-size: 14px;
+  color: #666;
+  margin: 0 0 4px 0;
+}
+
+.book-publisher {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+}
+
+.book-cover {
+  width: 100px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+
+/* タグ部分 */
+.book-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.tag {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.tag-genre {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+.tag-subject {
+  background-color: #f3e5f5;
+  color: #7b1fa2;
+}
+
+.tag-theme {
+  background-color: #e8f5e9;
+  color: #388e3c;
+}
+
+/* アクション部分 */
+.book-actions {
+  margin-top: auto;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: #0066cc;
+  text-decoration: none;
+  font-size: 14px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+.action-link:hover {
+  background-color: #f0f7ff;
+}
+
+/* ソース情報 */
+.book-source {
+  margin-top: 12px;
+  text-align: right;
+  color: #999;
+  font-size: 11px;
+}
+
+/* メタ情報ラベル */
+.meta-label {
+  font-size: 13px;
+  color: #666;
+  font-weight: normal;
+}
+
+.meta-value {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+}
+
+/* 宝石レベル表示部分の調整 */
+.jewel-level-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.jewel-level-item .meta-label {
+  margin-right: 4px;
+}
+
+/* 宝石が大きくなったのでメタ情報部分の高さを調整 */
+.book-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  padding: 12px 0;
+  flex: 1;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px; /* 宝石の高さに合わせる */
+}
+
+/* 説明文の折りたたみ表示 */
+.book-description {
+  margin-top: 12px;
+  position: relative;
+  flex: 1;
+  min-height: 60px;
+}
+
+.description-text {
+  color: #555;
+  line-height: 1.6;
+  overflow: hidden;
+  transition: max-height 0.3s ease-out;
+  position: relative;
+}
+
+/* 折りたたみ時は3行まで表示 */
+.description-text:not(.expanded) {
+  display: -webkit-box;
+  display: -moz-box;
+  display: box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  -moz-box-orient: vertical;
+  box-orient: vertical;
+  max-height: 4.8em; /* line-height * 3行 */
+  text-overflow: ellipsis;
+}
+
+/* 展開時は全て表示 */
+.description-text.expanded {
+  max-height: 1000px; /* 大きな値を設定してアニメーションを有効にする */
+  -webkit-line-clamp: unset;
+  display: block; /* -webkit-boxを解除 */
+}
+
+/* もっと見るボタン */
+.expand-button {
+  background: none;
+  border: none;
+  color: #0066cc;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 4px;
+  padding: 4px 8px;
+  text-decoration: underline;
+  transition: color 0.2s;
+  /* 疑似要素によるテキスト上書きを防ぐ */
+  position: relative;
+}
+
+.expand-button:hover {
+  color: #0052a3;
+}
+
+/* 疑似要素でテキストが上書きされないようにする */
+.expand-button::before,
+.expand-button::after {
+  content: none !important;
+}
+
+/* モバイル対応 */
+@media (max-width: 768px) {
+  .jewel-level-item .jewel-level {
+    transform: scale(0.9);
+  }
+  
+  /* モバイルでは2行まで表示 */
+  .description-text:not(.expanded) {
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    max-height: 3.2em;
+  }
+}

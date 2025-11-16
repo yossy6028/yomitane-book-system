@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Book } from '../types/Book';
 import { bookService } from '../services/bookService';
 import { BookCard } from './BookCard';
 import { Pagination } from './Pagination';
 import { FacetedSearch } from './FacetedSearch';
+import { BookFilterAndSort } from './BookFilterAndSort';
+import { AdvancedSearchButton } from './AdvancedSearchButton';
 import { Ruby, RubyText } from './Ruby';
 import { usePagination } from '../hooks/usePagination';
 import { useBookFilter } from '../hooks/useBookFilter';
@@ -11,17 +13,58 @@ import './BookList.css';
 
 interface BookListProps {
   onBack?: () => void;
+  testResult?: any; // テスト結果を受け取る
 }
 
-const BookList: React.FC<BookListProps> = ({ onBack }) => {
+const BookList: React.FC<BookListProps> = ({ onBack, testResult }) => {
   const [books, setBooks] = useState<Book[]>([]);
   const [facetFilteredBooks, setFacetFilteredBooks] = useState<Book[] | null>(null);
+  const [filterAndSortBooks, setFilterAndSortBooks] = useState<Book[] | null>(null);
+  const [advancedSearchBooks, setAdvancedSearchBooks] = useState<Book[] | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [statistics, setStatistics] = useState<any>(null);
   
   // カスタムフックを使用
-  const { filteredBooks, filter, updateFilter } = useBookFilter({ books });
-  const finalFilteredBooks = facetFilteredBooks !== null ? facetFilteredBooks : filteredBooks;
+  const { filteredBooks, filter, updateFilter } = useBookFilter({ books, testResult });
+  
+  // フィルタリングの優先順位: advancedSearchBooks > filterAndSortBooks > facetFilteredBooks > filteredBooks
+  const finalFilteredBooks = advancedSearchBooks !== null
+    ? advancedSearchBooks
+    : (filterAndSortBooks !== null 
+      ? filterAndSortBooks 
+      : (facetFilteredBooks !== null ? facetFilteredBooks : filteredBooks));
+  
+  // デバッグ: フィルタリング状態を確認
+  React.useEffect(() => {
+    const activeFilter = advancedSearchBooks !== null ? 'advancedSearch' :
+                        filterAndSortBooks !== null ? 'filterAndSort' :
+                        facetFilteredBooks !== null ? 'facetedSearch' : 'useBookFilter';
+    
+    console.log('[BookList] 📊 フィルタリング状態:', {
+      totalBooks: books.length,
+      advancedSearchBooks: advancedSearchBooks?.length || null,
+      filterAndSortBooks: filterAndSortBooks?.length || null,
+      facetFilteredBooks: facetFilteredBooks?.length || null,
+      filteredBooks: filteredBooks.length,
+      finalFilteredBooks: finalFilteredBooks.length,
+      activeFilter
+    });
+    
+    // 実際に表示される書籍のレベルを確認
+    if (finalFilteredBooks.length > 0) {
+      const levelDistribution = finalFilteredBooks.reduce((acc, book) => {
+        const level = book.reading_level_24 || 'undefined';
+        acc[level] = (acc[level] || 0) + 1;
+        return acc;
+      }, {} as Record<string | number, number>);
+      
+      console.log('[BookList] 📚 表示される書籍のレベル分布:', levelDistribution);
+      console.log('[BookList] 📖 表示される書籍例（最初の5冊）:', finalFilteredBooks.slice(0, 5).map(b => ({ 
+        title: b.title, 
+        level: b.reading_level_24 
+      })));
+    }
+  }, [books.length, advancedSearchBooks, filterAndSortBooks, facetFilteredBooks, filteredBooks.length, finalFilteredBooks.length, finalFilteredBooks]);
   
   const {
     currentPage,
@@ -96,38 +139,140 @@ const BookList: React.FC<BookListProps> = ({ onBack }) => {
               onClick={handleUpdateBooks}
               disabled={isLoading}
             >
-              {isLoading ? <><RubyText.更新 />中...</> : <>📥 <RubyText.図書 /><RubyText.更新 /></>}
+              {isLoading ? (
+                <React.Fragment>
+                  <RubyText.更新 />中...
+                </React.Fragment>
+              ) : (
+                <React.Fragment>
+                  📥 <RubyText.図書 /><RubyText.更新 />
+                </React.Fragment>
+              )}
             </button>
           </div>
         )}
       </div>
 
       <div className="search-section">
-        <h3>🔍 <RubyText.書籍 />を探す</h3>
+        <div className="search-header">
+          <h3>🔍 <RubyText.書籍 />を探す</h3>
+          <AdvancedSearchButton
+            books={books}
+            onFilterChange={useCallback((filtered: Book[] | null) => {
+              console.log('[BookList] AdvancedSearchButton onFilterChange:', filtered ? `${filtered.length}冊` : 'null (フィルタなし)');
+              // AdvancedSearchButtonが明示的にフィルタを設定した場合のみ上書き
+              if (filtered && filtered.length > 0) {
+                setAdvancedSearchBooks(filtered);
+                setFacetFilteredBooks(null);
+                setFilterAndSortBooks(null);
+                resetPagination();
+              } else if (filtered === null) {
+                // filteredがnullの場合は、AdvancedSearchBooksをクリア（BookFilterAndSortを優先）
+                setAdvancedSearchBooks(null);
+              }
+            }, [resetPagination])}
+            currentFilter={{
+              searchTerm: filter.searchTerm,
+              ageRange: filter.ageRange,
+              interests: filter.interests,
+              readingLevel: filter.readingLevel24,
+              categories: filter.categories
+            }}
+          />
+        </div>
         <div className="filter-group">
           <label><RubyText.検索 />キーワード:</label>
           <input
             type="text"
             placeholder="タイトル、ちょしゃ、内容でけんさく..."
             value={filter.searchTerm || ''}
-            onChange={(e) => updateFilter({ searchTerm: e.target.value })}
+            onChange={(e) => {
+              updateFilter({ searchTerm: e.target.value });
+              setAdvancedSearchBooks(null);
+            }}
             className="search-input"
           />
         </div>
       </div>
 
+      {/* レベル別・ジャンル別フィルタとソート */}
+      <BookFilterAndSort
+        books={books}
+        onFilterChange={useCallback((filtered: Book[] | null) => {
+          console.log('[BookList] BookFilterAndSort onFilterChange:', filtered ? `${filtered.length}冊` : 'null (フィルタなし)');
+          setFilterAndSortBooks(filtered); // filteredがnullの場合はnullを設定
+          if (filtered !== null) {
+            setFacetFilteredBooks(null); // BookFilterAndSort使用時はFacetedSearchをリセット
+            setAdvancedSearchBooks(null); // BookFilterAndSort使用時はAdvancedSearchをリセット
+            resetPagination();
+          }
+        }, [resetPagination])}
+        onSortChange={useCallback((sorted: Book[] | null) => {
+          console.log('[BookList] BookFilterAndSort onSortChange:', sorted ? `${sorted.length}冊` : 'null (フィルタなし)');
+          setFilterAndSortBooks(sorted); // sortedがnullの場合はnullを設定
+          if (sorted !== null) {
+            setFacetFilteredBooks(null); // BookFilterAndSort使用時はFacetedSearchをリセット
+            setAdvancedSearchBooks(null); // BookFilterAndSort使用時はAdvancedSearchをリセット
+            resetPagination();
+          }
+        }, [resetPagination])}
+      />
+
       <FacetedSearch 
         books={books} 
         onFilterChange={(filtered) => {
-          setFacetFilteredBooks(filtered);
-          // フィルタが実際に変更された場合のみリセット
-          if (filtered !== facetFilteredBooks) {
+          console.log('[BookList] FacetedSearch onFilterChange:', filtered ? `${filtered.length}冊` : 'null (フィルタなし)');
+          // filteredがnullまたは空の場合は何もしない
+          if (filtered) {
+            setFacetFilteredBooks(filtered);
+            setFilterAndSortBooks(null); // ファセット検索時はフィルタ&ソートをリセット
+            setAdvancedSearchBooks(null); // ファセット検索時はAdvancedSearchをリセット
             resetPagination();
+          } else if (filtered === null) {
+            // nullの場合はFacetedSearchをクリア
+            setFacetFilteredBooks(null);
           }
         }}
       />
 
-      <div className="books-grid">
+      {/* テスト結果フィルター */}
+      {testResult && (
+        <div className="test-result-filter">
+          <h3>🎯 <RubyText.テスト /><RubyText.結果 />に<RubyText.基 />づく<RubyText.推薦 /></h3>
+          <div className="test-result-summary">
+            <p className="test-summary-item">📖 読書レベル: <strong>{testResult.readingLevel || '未設定'}</strong></p>
+            <p className="test-summary-item">💎 宝石レベル: <strong>Lv.{testResult.gemLevel || '0'}</strong></p>
+            <p className="test-summary-item">📊 総合スコア: <strong>{testResult.totalScore || 0}点</strong></p>
+          </div>
+          <div className="filter-options">
+            <label className="filter-checkbox">
+              <input
+                type="checkbox"
+                checked={filter.testResultFilter?.enabled || false}
+                onChange={(e) => updateFilter({
+                  testResultFilter: {
+                    ...filter.testResultFilter,
+                    enabled: e.target.checked
+                  }
+                })}
+              />
+              <span>✅ テスト結果に基づく最適な本を優先表示</span>
+            </label>
+            
+            {filter.testResultFilter?.enabled && (
+              <div className="test-filter-details">
+                <div className="test-scores-display">
+                  <p>📖 語彙力スコア: {testResult.vocabularyScore}点</p>
+                  <p>🌐 常識力スコア: {testResult.commonSenseScore}点</p>
+                  <p>💎 推薦レベル: Lv.{testResult.gemLevel} 〜 Lv.{testResult.gemLevel + 1}</p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      <div className="books-section">
         <div className="results-header">
           <h3>📖 検索結果 ({finalFilteredBooks.length}件)</h3>
           {totalPages > 1 && (

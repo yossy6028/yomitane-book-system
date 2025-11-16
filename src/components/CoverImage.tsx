@@ -1,8 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { coverImageService } from '../services/coverImageService';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Book } from '../types/Book';
+import { normalizeImagePath, isValidImagePath } from '../utils/imageUtils';
+import { coverImageAutoFetcher } from '../services/coverImageAutoFetcher';
+
+type FetchReason = 'missing' | 'error';
 
 interface CoverImageProps {
-  book: any;
+  book: Book;
   className?: string;
   size?: 'small' | 'medium' | 'large';
   onImageLoad?: () => void;
@@ -10,8 +14,8 @@ interface CoverImageProps {
 }
 
 /**
- * 書籍表紙画像コンポーネント（統一版）
- * すべてのコンポーネントで共通使用
+ * 書籍表紙画像コンポーネント（最適化版）
+ * シンプルで信頼性の高い実装
  */
 export const CoverImage: React.FC<CoverImageProps> = ({ 
   book, 
@@ -20,96 +24,190 @@ export const CoverImage: React.FC<CoverImageProps> = ({
   onImageLoad,
   onImageError 
 }) => {
-  const [coverImage, setCoverImage] = useState<string>(book.coverImage || '');
-  const [isLoadingImage, setIsLoadingImage] = useState(false);
   const [hasImageError, setHasImageError] = useState(false);
+  const [isAutoFetching, setIsAutoFetching] = useState(false);
+  const attemptedReasonsRef = useRef<Set<FetchReason>>(new Set<FetchReason>());
+  const attemptedUrlsRef = useRef<Set<string>>(new Set());
+  const isMountedRef = useRef(true);
+  const defaultImage = useMemo(() => {
+    const publicUrl = process.env.PUBLIC_URL || '';
+    const cleanedPublicUrl = publicUrl.endsWith('/') ? publicUrl.slice(0, -1) : publicUrl;
+    return cleanedPublicUrl + '/images/default-cover.svg';
+  }, []);
+
+  // 画像パスを正規化
+  const normalizedPath = useMemo(() => normalizeImagePath(book.coverImage), [book.coverImage]);
+  const isValid = useMemo(() => isValidImagePath(normalizedPath), [normalizedPath]);
+
+  // PUBLIC_URLを考慮した画像パス
+  const imagePath = useMemo(() => {
+    if (!normalizedPath) {
+      return '';
+    }
+    // 既にhttpで始まる場合はそのまま返す
+    if (normalizedPath.startsWith('http://') || normalizedPath.startsWith('https://')) {
+      return normalizedPath;
+    }
+    // ローカルパスの場合、PUBLIC_URLを考慮（通常は空文字列または/）
+    const publicUrl = process.env.PUBLIC_URL || '';
+    // PUBLIC_URLの末尾のスラッシュを削除してから結合
+    const cleanedPublicUrl = publicUrl.endsWith('/') ? publicUrl.slice(0, -1) : publicUrl;
+    // パスが/で始まる場合、PUBLIC_URLと結合
+    if (normalizedPath.startsWith('/')) {
+      return cleanedPublicUrl + normalizedPath;
+    }
+    return normalizedPath;
+  }, [normalizedPath]);
+
+  const initialSrc = useMemo(() => {
+    const shouldUseImage = isValid && book.coverImage;
+    const src = shouldUseImage ? imagePath : defaultImage;
+    
+    // デバッグ用ログ（開発環境のみ）
+    if (process.env.NODE_ENV === 'development' && !shouldUseImage && book.coverImage) {
+      console.warn(`[CoverImage] デフォルト画像を使用: ${book.title}`, {
+        coverImage: book.coverImage,
+        normalizedPath: normalizedPath,
+        isValid: isValid,
+        imagePath: imagePath
+      });
+    }
+    
+    return src;
+  }, [book.coverImage, book.title, defaultImage, imagePath, isValid, normalizedPath]);
+
+  const [imageSrc, setImageSrc] = useState(initialSrc);
 
   useEffect(() => {
-    let mounted = true;
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
 
-    const loadCoverImage = async () => {
-      // 既存の画像URLがある場合はそれを使用
-      if (book.coverImage && book.coverImage.trim() !== '') {
-        if (mounted) setCoverImage(book.coverImage);
+  useEffect(() => {
+    attemptedReasonsRef.current.clear();
+    attemptedUrlsRef.current.clear();
+    setHasImageError(false);
+    setIsAutoFetching(false);
+    setImageSrc(initialSrc);
+  }, [book.id, initialSrc]);
+
+  // :3000を含む不完全なパスの検出
+  useEffect(() => {
+    if (normalizedPath.includes(':3000')) {
+      console.error(`[CoverImage] MALFORMED PATH DETECTED for ${book.title}:`, {
+        original: book.coverImage,
+        normalized: normalizedPath,
+        problem: 'Path contains :3000 without protocol'
+      });
+    }
+  }, [book.coverImage, book.title, normalizedPath]);
+
+  const attemptAutoFetch = useCallback(
+    async (reason: 'missing' | 'error') => {
+      if (attemptedReasonsRef.current.has(reason) || isAutoFetching) {
         return;
       }
 
-      // 既存の画像がない場合のみ検索
-      if (mounted) setIsLoadingImage(true);
-      
+      attemptedReasonsRef.current.add(reason);
+      setIsAutoFetching(true);
+
       try {
-        const imageUrl = await coverImageService.getImageForBook(book);
-        
-        if (mounted) {
-          setCoverImage(imageUrl);
-          setIsLoadingImage(false);
+        const fetchedUrl = await coverImageAutoFetcher.fetchAndCacheCover(book, reason);
+        if (!fetchedUrl || attemptedUrlsRef.current.has(fetchedUrl)) {
+          return;
         }
-      } catch (error) {
-        console.warn('表紙画像の取得に失敗しました:', error);
-        if (mounted) {
-          setCoverImage('');
-          setHasImageError(true);
-          setIsLoadingImage(false);
-          onImageError?.();
+
+        attemptedUrlsRef.current.add(fetchedUrl);
+
+        if (isMountedRef.current) {
+          setImageSrc(fetchedUrl);
+          setHasImageError(false);
+        }
+      } catch (autoFetchError) {
+        console.error('[CoverImage] 自動表紙取得に失敗しました', {
+          bookId: book.id,
+          title: book.title,
+          reason,
+          error: autoFetchError
+        });
+      } finally {
+        if (isMountedRef.current) {
+          setIsAutoFetching(false);
+        }
+        if (!isMountedRef.current) {
+          attemptedReasonsRef.current.delete(reason);
         }
       }
-    };
+    },
+    [book, isAutoFetching]
+  );
 
-    loadCoverImage();
-
-    return () => {
-      mounted = false;
-    };
-  }, [book, onImageError]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    const reason: FetchReason = hasImageError ? 'error' : 'missing';
+    const needsAutoFetch =
+      (!book.coverImage || !isValid || hasImageError) &&
+      !attemptedReasonsRef.current.has(reason);
+    if (needsAutoFetch) {
+      attemptAutoFetch(reason);
+    }
+  }, [attemptAutoFetch, book.coverImage, hasImageError, isValid]);
 
   // サイズに応じたクラス名を生成
   const getSizeClasses = () => {
     switch (size) {
       case 'small':
-        return 'w-12 h-16'; // 48x64px
+        return 'cover-image-small'; // 48x64px
       case 'large':
-        return 'w-24 h-32'; // 96x128px
+        return 'cover-image-large'; // 96x128px
       case 'medium':
       default:
-        return 'w-20 h-24'; // 80x96px
+        return 'cover-image-medium'; // 80x96px
     }
   };
 
-  const baseClasses = `${getSizeClasses()} object-cover border-2 border-gray-200 rounded-lg shadow-sm`;
+  const baseClasses = `${getSizeClasses()} cover-image-base`;
 
-  if (isLoadingImage) {
-    return (
-      <div className={`${baseClasses} ${className} bg-gray-100 flex flex-col items-center justify-center text-gray-500 text-xs`}>
-        <div className="animate-spin">🔄</div>
-        <div className="mt-1">読み込み中</div>
-      </div>
-    );
-  }
+  // 画像エラー時の処理
+  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const target = e.currentTarget;
+    console.error('[CoverImage] 画像読み込みエラー', {
+      title: book.title,
+      originalPath: book.coverImage,
+      normalizedPath: normalizedPath,
+      isValid: isValid,
+      currentSrc: imageSrc,
+      defaultImage: defaultImage,
+      errorType: e.type
+    });
+    
+    attemptedUrlsRef.current.add(target.src);
 
-  if (coverImage && !hasImageError) {
-    return (
-      <img 
-        src={coverImage} 
-        alt={book.title} 
-        className={`${baseClasses} ${className}`}
-        onLoad={() => {
-          setHasImageError(false);
-          onImageLoad?.();
-        }}
-        onError={() => {
-          setHasImageError(true);
-          onImageError?.();
-        }}
-      />
-    );
-  }
+    // デフォルト画像でない場合のみ、デフォルト画像に切り替え
+    if (imageSrc !== defaultImage) {
+      console.log(`[CoverImage] デフォルト画像に切り替え: ${book.title}`);
+      setImageSrc(defaultImage);
+      setHasImageError(true);
+    }
 
+    // 自動取得が未試行の場合はフォールバックで実行
+    void attemptAutoFetch('error');
+
+    onImageError?.();
+  };
+
+  // 常に画像タグを返す（デフォルト画像を含む）
   return (
-    <div className={`${baseClasses} ${className} bg-gradient-to-b from-gray-100 to-gray-200 flex flex-col items-center justify-center text-gray-600 text-xs p-2`}>
-      <div className="text-lg mb-1">📚</div>
-      <div className="text-center leading-tight">
-        {hasImageError ? 'エラー' : '画像なし'}
-      </div>
-    </div>
+    <img 
+      src={imageSrc} 
+      alt={book.title} 
+      className={`${baseClasses} ${className}`}
+      onLoad={() => {
+        onImageLoad?.();
+      }}
+      onError={handleImageError}
+      loading="lazy"
+    />
   );
 };

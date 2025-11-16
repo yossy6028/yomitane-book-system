@@ -49,16 +49,25 @@ class BookService {
   }
 
   // フィルタリング機能（適切な図書のみ）
-  getFilteredBooks(filter: BookFilter): Book[] {
+  filterBooks(filter: BookFilter): Book[] {
+    return this.getFilteredBooks(filter);
+  }
+
+  // 既存のgetFilteredBooksメソッド（内部使用）
+  private getFilteredBooks(filter: BookFilter): Book[] {
     // まず重複を除去
     const uniqueBooks = this.getAllBooks();
     
     return uniqueBooks.filter(book => {
-      // 年齢範囲フィルタ
+      // 年齢範囲フィルタ（新旧両方に対応）
       if (filter.ageRange) {
         const overlap = !(book.ageRange.max < filter.ageRange.min || book.ageRange.min > filter.ageRange.max);
         if (!overlap) return false;
       }
+      
+      // minAge/maxAgeでのフィルタリング
+      if (filter.minAge !== undefined && book.ageRange.max < filter.minAge) return false;
+      if (filter.maxAge !== undefined && book.ageRange.min > filter.maxAge) return false;
 
       // 興味分野フィルタ（新3軸システム対応）
       if (filter.interests && filter.interests.length > 0) {
@@ -73,10 +82,52 @@ class BookService {
         );
         if (!hasMatchingInterest) return false;
       }
+      
+      // interest_tagsフィルタ
+      if (filter.interestTags && filter.interestTags.length > 0) {
+        const hasMatchingTag = filter.interestTags.some(tag => 
+          book.interest_tags?.includes(tag)
+        );
+        if (!hasMatchingTag) return false;
+      }
+      
+      // theme_tagsフィルタ
+      if (filter.themeTags && filter.themeTags.length > 0) {
+        const hasMatchingTag = filter.themeTags.some(tag => 
+          book.theme_tags?.includes(tag)
+        );
+        if (!hasMatchingTag) return false;
+      }
 
-      // 読書レベルフィルタ
+      // 24段階読書レベルフィルタ（優先）
+      if (filter.readingLevel24 && filter.readingLevel24.length > 0) {
+        if (!book.reading_level_24) return false;
+        // 範囲チェック（[min, max]形式）の場合
+        if (filter.readingLevel24.length === 2 && typeof filter.readingLevel24[0] === 'number' && typeof filter.readingLevel24[1] === 'number') {
+          const [min, max] = filter.readingLevel24;
+          if (book.reading_level_24 < min || book.reading_level_24 > max) {
+            return false;
+          }
+        } else {
+          // 配列チェック（[1, 2, 3]など個別のレベル指定）
+          if (!filter.readingLevel24.includes(book.reading_level_24)) {
+            return false;
+          }
+        }
+      }
+      
+      // 旧読書レベルフィルタ（後方互換性のため）
       if (filter.readingLevel && filter.readingLevel.length > 0) {
-        if (!filter.readingLevel.includes(book.readingLevel.toString())) return false;
+        const readingLevels = filter.readingLevel.map(level => level.toString());
+        // まずreading_level_24をチェック（優先）
+        if (book.reading_level_24) {
+          const bookLevel = book.reading_level_24.toString();
+          if (!readingLevels.includes(bookLevel)) return false;
+        } else {
+          // フォールバック: 旧フィールドをチェック
+          const bookLevel = book.reading_level?.toString() || book.readingLevel?.toString();
+          if (!bookLevel || !readingLevels.includes(bookLevel)) return false;
+        }
       }
 
       // カテゴリフィルタ
@@ -88,8 +139,9 @@ class BookService {
       }
 
       // 検索語フィルタ
-      if (filter.searchTerm) {
-        const searchLower = filter.searchTerm.toLowerCase();
+      const searchKeyword = filter.searchKeyword || filter.searchTerm;
+      if (searchKeyword) {
+        const searchLower = searchKeyword.toLowerCase();
         const matchesSearch = 
           book.title.toLowerCase().includes(searchLower) ||
           book.author.toLowerCase().includes(searchLower) ||
@@ -376,18 +428,8 @@ class BookService {
     return [...this.updateLogs];
   }
 
-  // 手動で図書追加
-  addBook(book: Omit<Book, 'id' | 'lastUpdated'>): Book {
-    const newBook: Book = {
-      ...book,
-      id: Date.now().toString(),
-      lastUpdated: new Date().toISOString().split('T')[0]
-    };
-    
-    this.books.push(newBook);
-    this.saveBooks();
-    return newBook;
-  }
+  // 手動で図書追加（旧メソッド - 削除済み）
+  // 新しいaddBookメソッドを使用してください
 
   // 図書削除
   removeBook(id: string): boolean {
@@ -432,10 +474,147 @@ class BookService {
     return { added: addedCount, updated: updatedCount, invalid: invalidCount };
   }
 
-  // 統計情報取得
-  getStatistics() {
+  // 新規書籍追加
+  async addBook(bookData: Partial<Book>): Promise<{ success: boolean; book?: Book; error?: string }> {
+    try {
+      // 必須フィールドのチェック
+      const validationResult = await validateNewBook(bookData);
+      if (!validationResult.isValid) {
+        return { success: false, error: validationResult.errors.join(', ') };
+      }
+      
+      // IDの生成
+      const newBook: Book = {
+        ...bookData as Book,
+        id: bookData.id || this.generateBookId(),
+        lastUpdated: new Date().toISOString().split('T')[0]
+      };
+      
+      // 重複チェック
+      const existing = this.books.find(b => 
+        b.title === newBook.title && b.author === newBook.author
+      );
+      if (existing) {
+        return { success: false, error: '同じタイトルと著者の本が既に存在します' };
+      }
+      
+      // 追加
+      this.books.push(newBook);
+      this.saveBooks();
+      
+      return { success: true, book: newBook };
+    } catch (error) {
+      console.error('書籍追加エラー:', error);
+      return { success: false, error: error instanceof Error ? error.message : '不明なエラー' };
+    }
+  }
+  
+  // 書籍情報更新
+  async updateBook(id: string, updates: Partial<Book>): Promise<{ success: boolean; book?: Book; error?: string }> {
+    try {
+      const index = this.books.findIndex(book => book.id === id);
+      if (index === -1) {
+        return { success: false, error: '書籍が見つかりません' };
+      }
+      
+      // 更新
+      this.books[index] = {
+        ...this.books[index],
+        ...updates,
+        id: this.books[index].id, // IDは変更させない
+        lastUpdated: new Date().toISOString().split('T')[0]
+      };
+      
+      this.saveBooks();
+      return { success: true, book: this.books[index] };
+    } catch (error) {
+      console.error('書籍更新エラー:', error);
+      return { success: false, error: error instanceof Error ? error.message : '不明なエラー' };
+    }
+  }
+  
+  // 書籍削除
+  deleteBook(id: string): boolean {
+    const initialLength = this.books.length;
+    this.books = this.books.filter(book => book.id !== id);
+    
+    if (this.books.length < initialLength) {
+      this.saveBooks();
+      return true;
+    }
+    return false;
+  }
+  
+  // 統計情報取得（getStatsメソッド）
+  getStats() {
+    const books = this.getAllBooks();
+    const totalBooks = books.length;
+    
+    // カテゴリー分布
+    const categoryDistribution: Record<string, number> = {};
+    books.forEach(book => {
+      book.categories.forEach(category => {
+        categoryDistribution[category] = (categoryDistribution[category] || 0) + 1;
+      });
+    });
+    
+    // 年齢分布
+    const ageDistribution = {
+      '6-8歳': 0,
+      '9-11歳': 0,
+      '12-15歳': 0
+    };
+    books.forEach(book => {
+      if (book.ageRange.min <= 8) ageDistribution['6-8歳']++;
+      if (book.ageRange.min <= 11 && book.ageRange.max >= 9) ageDistribution['9-11歳']++;
+      if (book.ageRange.max >= 12) ageDistribution['12-15歳']++;
+    });
+    
+    // 評価分布
+    const ratingDistribution: Record<number, number> = {};
+    books.forEach(book => {
+      const rating = Math.floor(book.rating);
+      ratingDistribution[rating] = (ratingDistribution[rating] || 0) + 1;
+    });
+    
+    // 読書レベル分布
+    const readingLevelDistribution: Record<number, number> = {};
+    books.forEach(book => {
+      if (book.reading_level) {
+        readingLevelDistribution[book.reading_level] = 
+          (readingLevelDistribution[book.reading_level] || 0) + 1;
+      }
+    });
+    
+    // 平均評価
+    const averageRating = books.length > 0 
+      ? books.reduce((sum, book) => sum + book.rating, 0) / books.length 
+      : 0;
+    
+    // 平均ページ数
+    const booksWithPages = books.filter(book => book.pageCount);
+    const averagePages = booksWithPages.length > 0
+      ? booksWithPages.reduce((sum, book) => sum + (book.pageCount || 0), 0) / booksWithPages.length
+      : 0;
+    
     return {
-      totalBooks: this.books.length,
+      totalBooks,
+      categoryDistribution,
+      ageDistribution,
+      ratingDistribution,
+      readingLevelDistribution,
+      averageRating,
+      averagePages
+    };
+  }
+  
+  // 統計情報取得（旧メソッド名）
+  getStatistics() {
+    // 登録図書数は、フィルタリング前の全書籍数（this.books.length）を使用
+    // これは実際に登録されている全書籍数を表す
+    // 表示可能な書籍数が必要な場合は、getAllBooks().lengthを使用すること
+    return {
+      totalBooks: this.books.length, // 登録されている全書籍数
       byAgeRange: this.getBooksByAgeRange(),
       byReadingLevel: this.getBooksByReadingLevel(),
       byInterests: this.getBooksByInterests(),
@@ -444,13 +623,15 @@ class BookService {
   }
 
   private getBooksByAgeRange() {
+    // getAllBooks()を使用して、実際に表示可能な書籍から年齢範囲分布を取得
+    const allBooks = this.getAllBooks();
     const ranges = {
       '6-8歳': 0,
       '9-11歳': 0,
       '12-15歳': 0
     };
 
-    this.books.forEach(book => {
+    allBooks.forEach(book => {
       if (book.ageRange.min <= 8) ranges['6-8歳']++;
       if (book.ageRange.min <= 11 && book.ageRange.max >= 9) ranges['9-11歳']++;
       if (book.ageRange.max >= 12) ranges['12-15歳']++;
@@ -460,16 +641,22 @@ class BookService {
   }
 
   private getBooksByReadingLevel() {
-    return this.books.reduce((acc, book) => {
-      acc[book.readingLevel] = (acc[book.readingLevel] || 0) + 1;
+    // getAllBooks()を使用して、実際に表示可能な書籍から読書レベル分布を取得
+    const allBooks = this.getAllBooks();
+    return allBooks.reduce((acc, book) => {
+      if (book.readingLevel) {
+        acc[book.readingLevel] = (acc[book.readingLevel] || 0) + 1;
+      }
       return acc;
     }, {} as Record<string, number>);
   }
 
   private getBooksByInterests() {
+    // getAllBooks()を使用して、実際に表示可能な書籍から興味分野分布を取得
+    const allBooks = this.getAllBooks();
     const interestCounts: Record<string, number> = {};
     
-    this.books.forEach(book => {
+    allBooks.forEach(book => {
       // 新3軸システム対応
       const allTags = [
         ...(book.interests || []),
@@ -485,6 +672,8 @@ class BookService {
   }
 
   private getLastUpdateDate(): string {
+    // 登録されている全書籍から最新の更新日を取得
+    // フィルタリング前の全書籍から取得することで、実際のデータ更新日を反映
     if (this.books.length === 0) return '';
     
     return this.books
@@ -492,6 +681,11 @@ class BookService {
       .filter(date => date !== '')
       .sort()
       .reverse()[0] || '';
+  }
+  
+  // 書籍ID生成
+  private generateBookId(): string {
+    return `book-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
   }
 }
 
